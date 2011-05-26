@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Nested Oddjob" default="test">
+	
+	<taskdef name="oddjob" 
+		 classname="org.oddjob.ant.OddjobTask"/>
+	 
+	 <target name="test">
+	 	<oddjob config="oddjob.xml"/>
+	 </target>
+</project>

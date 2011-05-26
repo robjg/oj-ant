@@ -1,0 +1,5 @@
+<oddjob>
+	<job>
+		<echo id='echo' text='${echo.class.classLoader}'/>
+	</job>
+</oddjob>

@@ -1,0 +1,21 @@
+<oddjob>
+	<job>
+		<sequential>
+			<jobs>
+				<ant id='myant'>
+					<output>
+						<buffer id='ant-output'/>
+					</output>
+					<tasks>
+						<xml>
+							<tasks>
+								<echo message='${myant.class.classLoader}' />
+							</tasks>
+						</xml>
+					</tasks>
+				</ant>
+				<echo text='${ant-output}'/>
+			</jobs>
+		</sequential>
+	</job>
+</oddjob>
