@@ -93,7 +93,7 @@ public class OddjobTask extends Task {
 		oddjob.run();
 		
 		log("Ran Oddjob [" + oddjob.toString() + "], state " + 
-				oddjob.lastJobStateEvent().getJobState());
+				oddjob.lastStateEvent().getState());
 
 	}
 	

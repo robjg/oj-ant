@@ -22,8 +22,9 @@ import org.oddjob.arooa.convert.ArooaConversionException;
 import org.oddjob.arooa.standard.StandardArooaSession;
 import org.oddjob.arooa.xml.XMLConfiguration;
 import org.oddjob.state.JobState;
-import org.oddjob.state.JobStateEvent;
-import org.oddjob.state.JobStateListener;
+import org.oddjob.state.ParentState;
+import org.oddjob.state.StateEvent;
+import org.oddjob.state.StateListener;
 import org.oddjob.tools.CompileJob;
 import org.oddjob.util.ClassLoaderDiagnostics;
 
@@ -58,7 +59,7 @@ public class AntJobTest extends TestCase {
 		oj.setArgs(new String[] { "greeting" });
 		oj.run();
 		
-		assertEquals(JobState.COMPLETE, oj.lastJobStateEvent().getJobState());
+		assertEquals(ParentState.COMPLETE, oj.lastStateEvent().getState());
 		
 		String s = new OddjobLookup(oj).lookup("result", String.class);
 		
@@ -129,7 +130,7 @@ public class AntJobTest extends TestCase {
 		oj.setConfiguration(new XMLConfiguration("XML", config));
 		oj.run();
 		
-		assertEquals(JobState.COMPLETE, oj.lastJobStateEvent().getJobState());
+		assertEquals(ParentState.COMPLETE, oj.lastStateEvent().getState());
 		
 		assertEquals("Apples", results.get("one"));
 		assertEquals("Apples", results.get("two"));
@@ -164,11 +165,11 @@ public class AntJobTest extends TestCase {
 		oj.setConfiguration(new XMLConfiguration("XML", config));
 		oj.run();
 		
-		assertEquals(JobState.EXCEPTION, oj.lastJobStateEvent().getJobState());
+		assertEquals(ParentState.EXCEPTION, oj.lastStateEvent().getState());
 		
-		class L implements JobStateListener {
+		class L implements StateListener {
 			String em;
-			public void jobStateChange(JobStateEvent event) {
+			public void jobStateChange(StateEvent event) {
 				em = event.getException().getCause().getMessage();
 			}
 		}
@@ -177,7 +178,7 @@ public class AntJobTest extends TestCase {
 		Stateful stateful = new OddjobLookup(oj).lookup(
 				"foo", Stateful.class);
 		
-		stateful.addJobStateListener(l);
+		stateful.addStateListener(l);
 		
 		assertEquals("Ahhhhh!", l.em);
 	}
@@ -225,7 +226,7 @@ public class AntJobTest extends TestCase {
 		oj.setConfiguration(new XMLConfiguration("XML", config));
 		oj.run();
 		
-		assertEquals(JobState.COMPLETE, oj.lastJobStateEvent().getJobState());
+		assertEquals(ParentState.COMPLETE, oj.lastStateEvent().getState());
 		
 		assertEquals("Apples", results.get("three"));
 		assertEquals("Apples", results.get("four"));
@@ -280,7 +281,7 @@ public class AntJobTest extends TestCase {
 		oj.setConfiguration(new XMLConfiguration("XML", config));
 		oj.run();
 		
-		assertEquals(JobState.COMPLETE, oj.lastJobStateEvent().getJobState());
+		assertEquals(ParentState.COMPLETE, oj.lastStateEvent().getState());
 		
 		assertEquals("Apples", results.get("five"));
 		assertEquals("Pears", results.get("six"));
@@ -368,7 +369,7 @@ public class AntJobTest extends TestCase {
 		oj.setArgs(new String[] { dirs.base().toString() });
 		oj.run();
 		
-		assertEquals(JobState.COMPLETE, oj.lastJobStateEvent().getJobState());
+		assertEquals(ParentState.COMPLETE, oj.lastStateEvent().getState());
 
 		AntJob aj = new OddjobLookup(oj).lookup("a", AntJob.class);
 		
@@ -409,7 +410,7 @@ public class AntJobTest extends TestCase {
 		oj.setArgs(new String[] { new OurDirs().base().toString() });
 		oj.run();
 		
-		assertEquals(JobState.COMPLETE, oj.lastJobStateEvent().getJobState());
+		assertEquals(ParentState.COMPLETE, oj.lastStateEvent().getState());
 		
 		assertEquals(new Boolean(true), results.get("basedirtest"));
 	}
@@ -427,11 +428,11 @@ public class AntJobTest extends TestCase {
 		
 		test.run();
 		
-		assertEquals(JobState.COMPLETE, test.lastJobStateEvent().getJobState());
+		assertEquals(JobState.COMPLETE, test.lastStateEvent().getState());
 		
 		AntJob copy = Helper.copy(test);
 		
-		assertEquals(JobState.COMPLETE, copy.lastJobStateEvent().getJobState());		
+		assertEquals(JobState.COMPLETE, copy.lastStateEvent().getState());		
 	}
 	
 	public static class HangingTask extends Task {
@@ -476,8 +477,7 @@ public class AntJobTest extends TestCase {
 
 		t.join();
 		
-		assertEquals(JobState.INCOMPLETE, oj.lastJobStateEvent().getJobState());	
-	
+		assertEquals(ParentState.INCOMPLETE, oj.lastStateEvent().getState());	
 	}
 	
 	public void testReset() {
@@ -488,7 +488,7 @@ public class AntJobTest extends TestCase {
 		test.setTasks("<tasks><echo message='ok'/></tasks>");
 		test.run();
 		
-		assertEquals(JobState.COMPLETE, test.lastJobStateEvent().getJobState());
+		assertEquals(JobState.COMPLETE, test.lastStateEvent().getState());
 		
 		assertNotNull(test.getProject());
 		
