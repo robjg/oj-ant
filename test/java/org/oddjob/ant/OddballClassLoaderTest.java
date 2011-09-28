@@ -24,6 +24,7 @@ import org.oddjob.io.FilesType;
 import org.oddjob.oddballs.DirectoryOddball;
 import org.oddjob.oddballs.Oddball;
 import org.oddjob.oddballs.OddballsDescriptorFactory;
+import org.oddjob.state.ParentState;
 import org.oddjob.util.URLClassLoaderType;
 
 public class OddballClassLoaderTest extends TestCase {
@@ -170,7 +171,11 @@ public class OddballClassLoaderTest extends TestCase {
 			" <job>" +
 			"  <ant id='myant'>" +
 			"   <output>" +
-			"    <buffer id='ant-output'/>" +
+			"    <identify id='ant-output'>" +
+			"     <value>" +
+			"      <buffer/>" +
+			"     </value>" +
+			"    </identify>" +
 			"   </output>" +
 			"   <tasks>" +
 			"    <xml>" +
@@ -192,6 +197,9 @@ public class OddballClassLoaderTest extends TestCase {
 		
 		oddjob.run();
 
+		assertEquals(ParentState.COMPLETE, 
+				oddjob.lastStateEvent().getState());
+		
 		console.close();
 		console.dump(logger);
 		

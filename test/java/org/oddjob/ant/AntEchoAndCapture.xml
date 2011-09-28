@@ -2,12 +2,16 @@
     <job>
         <ant id='an-ant'>
             <output>
-                <buffer id='result' />
+                <identify id='result'>
+                    <value>
+                        <buffer/>
+                    </value>
+                </identify>
             </output>
             <tasks>
                 <xml>
                     <tasks>
-                        <echo message='${this.args[0]}' />
+                        <echo message='${this.args[0]}'/>
                     </tasks>
                 </xml>
             </tasks>
