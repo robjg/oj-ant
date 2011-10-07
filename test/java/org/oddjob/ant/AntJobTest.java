@@ -260,7 +260,7 @@ public class AntJobTest extends TestCase {
 			"      <value key='v.fruit' value='Pears'/>" +
 			"     </values>" +
 			"    </set>" +
-			"    <echo text='${v.fruit}'/>" +
+			"    <echo>${v.fruit}</echo>" +
 			"    <ant project='${defs.project}'>" +
 			"     <tasks>" +
 			"      <xml>" +

@@ -18,7 +18,7 @@
                         </xml>
                     </tasks>
                 </ant>
-                <echo text='${ant-output}'/>
+                <echo>${ant-output}</echo>
             </jobs>
         </sequential>
     </job>
