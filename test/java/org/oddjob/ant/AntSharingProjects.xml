@@ -1,0 +1,38 @@
+<oddjob>
+    <job>
+        <sequential>
+            <jobs>
+                <variables id='v'>
+                    <fruit>
+                        <value value='Apples'/>
+                    </fruit>
+                </variables>
+                <ant id='defs'>
+                    <tasks>
+                        <xml>
+                            <tasks>
+                                <taskdef name='result'
+                                    classname='org.oddjob.ant.AntJobTest$ResultTask'/>
+                                <property name='our.fruit'
+                                    value='${v.fruit}'/>
+                                <property name='v.fruit' value='Pears'/>
+                            </tasks>
+                        </xml>
+                    </tasks>
+                </ant>
+                <ant project='${defs.project}'>
+                    <tasks>
+                        <xml>
+                            <tasks>
+                                <property name='our.fruit'
+                                    value='Pears'/>
+                                <result key='three' result='${our.fruit}'/>
+                                <result key='four' result='${v.fruit}'/>
+                            </tasks>
+                        </xml>
+                    </tasks>
+                </ant>
+            </jobs>
+        </sequential>
+    </job>
+</oddjob>

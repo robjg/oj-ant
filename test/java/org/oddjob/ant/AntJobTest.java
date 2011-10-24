@@ -7,20 +7,25 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 import junit.framework.TestCase;
 
+import org.apache.log4j.Logger;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 import org.oddjob.FailedToStopException;
+import org.oddjob.FragmentHelper;
 import org.oddjob.Helper;
 import org.oddjob.Oddjob;
 import org.oddjob.OddjobLookup;
 import org.oddjob.OurDirs;
 import org.oddjob.Stateful;
+import org.oddjob.arooa.ArooaParseException;
 import org.oddjob.arooa.convert.ArooaConversionException;
 import org.oddjob.arooa.standard.StandardArooaSession;
 import org.oddjob.arooa.xml.XMLConfiguration;
+import org.oddjob.io.BufferType;
 import org.oddjob.state.JobState;
 import org.oddjob.state.ParentState;
 import org.oddjob.state.StateEvent;
@@ -32,8 +37,19 @@ import org.oddjob.util.ClassLoaderDiagnostics;
  * Tests for AntJob.
  */
 public class AntJobTest extends TestCase {
+
+	private static final Logger logger = Logger.getLogger(AntJobTest.class);
 	
 	static final String LS = System.getProperty("line.separator");
+	
+	@Override
+	protected void setUp() throws Exception {
+		super.setUp();
+		
+		logger.info("------------------  " + getName() + "-----------------");
+		
+		results = new HashMap<String, Object>();
+	}
 	
 	public static class Result implements Runnable {
 		String result;
@@ -52,32 +68,50 @@ public class AntJobTest extends TestCase {
 	
 	public void testJob() throws ArooaConversionException {
 				
-		Oddjob oj = new Oddjob();
-		oj.setConfiguration(new XMLConfiguration(
+		Oddjob oddjob = new Oddjob();
+		oddjob.setConfiguration(new XMLConfiguration(
 				"org/oddjob/ant/AntEchoAndCapture.xml",
 				getClass().getClassLoader()));
-		oj.setArgs(new String[] { "greeting" });
-		oj.run();
+		oddjob.setArgs(new String[] { "greeting" });
+		oddjob.run();
 		
-		assertEquals(ParentState.COMPLETE, oj.lastStateEvent().getState());
+		assertEquals(ParentState.COMPLETE, oddjob.lastStateEvent().getState());
 		
-		String s = new OddjobLookup(oj).lookup("result", String.class);
+		String s = new OddjobLookup(oddjob).lookup("result", String.class);
 		
 		assertEquals("     [echo] greeting" + LS, s);
 		
 		// check version.
-		String version = new OddjobLookup(oj).lookup("an-ant.version", 
+		String version = new OddjobLookup(oddjob).lookup("an-ant.version", 
 				String.class);
 		
 		assertTrue(version.startsWith("Apache Ant"));
 		
-		oj.destroy();
+		oddjob.destroy();
+	}
+
+	public void testSettingPropertiesInAnt() throws ArooaParseException {
+		
+		FragmentHelper helper = new FragmentHelper();
+		
+		AntJob test = (AntJob) helper.createComponentFromResource(
+				"org/oddjob/ant/AntSettingPropertiesInAnt.xml");
+		
+		BufferType buffer = new BufferType();
+		buffer.configured();
+		test.setOutput(buffer.toOutputStream());
+		
+		test.run();
+		
+		assertEquals(JobState.COMPLETE, test.lastStateEvent().getState());
+				
+		assertEquals("[echo] Test", buffer.getText().trim());
 	}
 	
-	// use a map so each test can set a different entry
-	// as it looks like eclipse runs tests in parallel.
-	static final Map<String, Object> results = 
-		new HashMap<String, Object>();
+	
+	
+	// use a map so each test can set a different entry.
+	static Map<String, Object> results;
 	
 	public static class ResultTask extends Task {
 		String key;
@@ -98,39 +132,13 @@ public class AntJobTest extends TestCase {
 		
 	public void testUsingOddjobProperty() {
 		
-		String config =
-			"<oddjob id='this'>" +
-			" <job>" +
-			"  <sequential>" +
-			"   <jobs>" +
-			"    <variables id='v'>" +
-			"     <fruit>" +
-			"      <value value='Apples'/>" +
-			"     </fruit>" +
-			"    </variables>" +
-			"    <ant>" +
-			"     <tasks>" +
-			"      <xml>" +
-			"       <tasks>" +
-			"     <taskdef name='result' classname='" + ResultTask.class.getName() + "'/>" +
-			"      <property name='our.fruit' value='${v.fruit}'/>" +
-			"      <property name='v.fruit' value='Pears'/>" +
-			"	   <result key='one' result='${our.fruit}'/>" +
-			"	   <result key='two' result='${v.fruit}'/>" +
-			"        </tasks>" +
-			"       </xml>" +
-			"      </tasks>" +
-			"	 </ant>" +
-			"   </jobs>" +
-			"  </sequential>" +
-			" </job>" +
-			"</oddjob>";
+		Oddjob oddjob = new Oddjob();
+		oddjob.setConfiguration(new XMLConfiguration(
+				"org/oddjob/ant/AntUsingOddjobProperties.xml",
+				getClass().getClassLoader()));
+		oddjob.run();
 		
-		Oddjob oj = new Oddjob();
-		oj.setConfiguration(new XMLConfiguration("XML", config));
-		oj.run();
-		
-		assertEquals(ParentState.COMPLETE, oj.lastStateEvent().getState());
+		assertEquals(ParentState.COMPLETE, oddjob.lastStateEvent().getState());
 		
 		assertEquals("Apples", results.get("one"));
 		assertEquals("Apples", results.get("two"));
@@ -185,45 +193,10 @@ public class AntJobTest extends TestCase {
 	
 	public void testSharedProject() {
 		
-		String config =
-			"<oddjob>" +
-			" <job>" +
-			"  <sequential>" +
-			"   <jobs>" +
-			"    <variables id='v'>" +
-			"     <fruit>" +
-			"      <value value='Apples'/>" +
-			"     </fruit>" +
-			"    </variables>" +
-			"    <ant id='defs'>" +
-			"     <tasks>" +
-			"      <xml>" +
-			"       <tasks>" +
-			"     <taskdef name='result' classname='" + ResultTask.class.getName() + "'/>" +
-			"     <property name='our.fruit' value='${v.fruit}'/>" +
-			"     <property name='v.fruit' value='Pears'/>" +
-			"        </tasks>" +
-			"       </xml>" +
-			"      </tasks>" +
-			"    </ant>" +
-			"    <ant project='${defs.project}'>" +
-			"     <tasks>" +
-			"      <xml>" +
-			"       <tasks>" +
-			"     <property name='our.fruit' value='Pears'/>" +
-			"	  <result key='three' result='${our.fruit}'/>" +
-			"	  <result key='four' result='${v.fruit}'/>" +
-			"       </tasks>" +
-			"      </xml>" +
-			"     </tasks>" +
-			"    </ant>" +
-			"   </jobs>" +
-			"  </sequential>" +
-			" </job>" +
-			"</oddjob>";
-		
 		Oddjob oj = new Oddjob();
-		oj.setConfiguration(new XMLConfiguration("XML", config));
+		oj.setConfiguration(new XMLConfiguration(
+				"org/oddjob/ant/AntSharingProjects.xml", 
+				getClass().getClassLoader()));
 		oj.run();
 		
 		assertEquals(ParentState.COMPLETE, oj.lastStateEvent().getState());
@@ -495,5 +468,28 @@ public class AntJobTest extends TestCase {
 		test.hardReset();
 		
 		assertNull(test.getProject());
+	}
+	
+	public void testWorkingWithFileExample() {
+
+		OurDirs dirs = new OurDirs();
+		
+		File workDir = dirs.relative("work/files");
+		workDir.mkdirs();
+
+		Properties properties = new Properties();
+		properties.setProperty("work.dir", workDir.getPath());
+		
+		Oddjob oddjob = new Oddjob();
+		oddjob.setConfiguration(new XMLConfiguration(
+				"org/oddjob/ant/AntWorkingWithFiles.xml",
+				getClass().getClassLoader()));
+		oddjob.setProperties(properties);
+		
+		oddjob.run();
+		
+		assertEquals(ParentState.COMPLETE, oddjob.lastStateEvent().getState());
+		
+		oddjob.destroy();
 	}
 }

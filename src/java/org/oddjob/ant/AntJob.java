@@ -63,74 +63,36 @@ import org.oddjob.util.OddjobConfigException;
  * 
  * Defining Ant properties in an Ant Job.
  * 
- * <pre>
- * &lt;ant&gt;
- *  &lt;tasks&gt;
- *   &lt;xml&gt;
- *    &lt;tasks&gt;
- *     &lt;property name="test.thing" value="Test" /&gt;
- *     &lt;echo message='${test.thing}'/&gt;
- *    &lt;/tasks&gt;
- *   &lt;/xml&gt;
- *  &lt;/tasks&gt;
- * &lt;/ant&gt;
- * </pre>
+ * {@oddjob.xml.resource org/oddjob/ant/AntSettingPropertiesInAnt.xml}
+ * 
+ * @oddjob.example
+ * 
+ * Using Oddjob variables. Variables and properties defined in Oddjob are
+ * available in the Ant tasks.
+ * 
+ * @oddjob.xml.resource org/oddjob/ant/AntUsingOddjobProperties.xml}
+ * 
+ * Not that the property defined in Ant does not override that defined
+ * in Oddjob (as per the rules of Ant). the result of both one and two is
+ * 'Apples'
  * 
  * @oddjob.example
  * 
  * Sharing a project.
  * 
- * <pre>
- * &lt;sequential&gt;
- *  &lt;jobs&gt;
- *   &lt;ant id='defs'&gt;
- *    &lt;tasks&gt;
- *     &lt;xml&gt;
- *      &lt;tasks&gt;
- *       &lt;taskdef name='foo' 
- *                   classname='org.oddjob.reference.ant.OurTask'/&gt;
- *       &lt;property name="test.thing" value="Test"/&gt;
- *      &lt;/tasks&gt;
- *     &lt;/xml&gt;
- *    &lt;/tasks&gt;
- *   &lt;/ant&gt;
- *   &lt;ant project='${defs.project}'&gt;
- *    &lt;tasks&gt;
- *     &lt;xml&gt;
- *      &lt;tasks&gt;
- *       &lt;foo stuff='${test.thing}'/&gt;
- *      &lt;/tasks&gt;
- *     &lt;/xml&gt;
- *    &lt;/tasks&gt;
- *   &lt;/ant&gt;
- *  &lt;/jobs&gt;
- * &lt;/sequential&gt;
- * </pre>
- *  
+ * {@oddjob.xml.resource org/oddjob/ant/AntSharingProject.xml}
+ * 
+ * The first Ant job declares a task and properties that the second
+ * Ant project can access.
+ * 
  * @oddjob.example
  * 
- * Using Oddjob variables.
+ * Working with files in Ant.
  * 
- * <pre>
- * &lt;sequential&gt;
- * 	&lt;jobs&gt;
- *   &lt;variables id='v'&gt;
- *    &lt;stuff&gt;
- *     &lt;value value='Hello World'/&gt;
- *    &lt;/stuff&gt;
- *   &lt;/variables&gt;
- *   &lt;ant&gt;
- *    &lt;tasks&gt;
- *     &lt;xml&gt;
- *      &lt;echo message='${v.stuff}'/&gt;
- *     &lt;/xml&gt;
- *    &lt;/tasks&gt;
- *   &lt;/ant&gt;
- * &lt;/sequential&gt;
- * </pre>
+ * {@oddjob.xml.resource org/oddjob/ant/AntWorkingWithFiles.xml}
  * 
+ * @author rob
  */
-
 public class AntJob extends SerializableJob 
 implements Stoppable {
     static final long serialVersionUID = 2009042400L;
