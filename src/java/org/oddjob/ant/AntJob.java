@@ -70,9 +70,9 @@ import org.oddjob.util.OddjobConfigException;
  * Using Oddjob variables. Variables and properties defined in Oddjob are
  * available in the Ant tasks.
  * 
- * @oddjob.xml.resource org/oddjob/ant/AntUsingOddjobProperties.xml}
+ * {@oddjob.xml.resource org/oddjob/ant/AntUsingOddjobProperties.xml}
  * 
- * Not that the property defined in Ant does not override that defined
+ * Note that the property defined in Ant does not override that defined
  * in Oddjob (as per the rules of Ant). the result of both one and two is
  * 'Apples'
  * 
@@ -80,7 +80,7 @@ import org.oddjob.util.OddjobConfigException;
  * 
  * Sharing a project.
  * 
- * {@oddjob.xml.resource org/oddjob/ant/AntSharingProject.xml}
+ * {@oddjob.xml.resource org/oddjob/ant/AntSharingProjects.xml}
  * 
  * The first Ant job declares a task and properties that the second
  * Ant project can access.
