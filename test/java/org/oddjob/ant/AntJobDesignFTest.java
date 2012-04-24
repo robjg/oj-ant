@@ -1,5 +1,6 @@
 package org.oddjob.ant;
 
+import java.io.File;
 import java.io.IOException;
 
 import org.apache.log4j.Logger;
@@ -69,7 +70,10 @@ public class AntJobDesignFTest extends XMLTestCase {
 
 		assertXMLEqual(expectedTasks, test.getTasks());
 		
-		assertEquals("URLClassLoader: mystuff.jar", test.getClassLoader().toString());
+		assertEquals("URLClassLoader: " + 
+				new File("mystuff.jar").getAbsolutePath(), 
+				test.getClassLoader().toString());
+		
 		assertEquals("ERR", test.getMessageLevel());
 	}
 
