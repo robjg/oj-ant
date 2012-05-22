@@ -5,7 +5,7 @@ import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.PropertyHelper;
 import org.oddjob.arooa.ArooaSession;
 import org.oddjob.arooa.convert.ArooaConversionException;
-import org.oddjob.arooa.registry.BeanDirectory;
+import org.oddjob.arooa.runtime.Evaluator;
 
 /**
  * Perform the property replacement. This allows
@@ -25,19 +25,15 @@ public class OJPropertyHelper implements PropertyHelper.PropertyEvaluator {
 	@Override
 	public Object evaluate(String property, PropertyHelper propertyHelper) {
 		
-		String result = session.getPropertyManager().lookup(property);
+		Evaluator evaluator = session.getTools().getEvaluator();
 
-		if (result == null) {
-			
-			BeanDirectory lookup = session.getBeanRegistry();
-
-			try {
-				result = lookup.lookup(property, String.class);
-			}
-			catch (ArooaConversionException e) {
-				throw new BuildException("Failed getting property " + property, e);
-			}			
+		String result = null;
+		try {
+			result = evaluator.evaluate(property, session, String.class);
 		}
+		catch (ArooaConversionException e) {
+			throw new BuildException("Failed getting property " + property, e);
+		}			
 		
 		logger.debug("Required: [" + property +
 				"], returning [" + result + "]");

@@ -11,12 +11,14 @@ import org.apache.tools.ant.Target;
 import org.oddjob.OddjobDescriptorFactory;
 import org.oddjob.arooa.ArooaDescriptor;
 import org.oddjob.arooa.ArooaParseException;
+import org.oddjob.arooa.ArooaTools;
 import org.oddjob.arooa.MockArooaSession;
 import org.oddjob.arooa.registry.BeanRegistry;
 import org.oddjob.arooa.registry.MockBeanRegistry;
 import org.oddjob.arooa.runtime.PropertyManager;
 import org.oddjob.arooa.standard.MockPropertyManager;
 import org.oddjob.arooa.standard.StandardArooaSession;
+import org.oddjob.arooa.standard.StandardTools;
 import org.oddjob.values.types.PropertyType;
 
 public class OJPropertyHelperTest extends TestCase {
@@ -69,6 +71,11 @@ public class OJPropertyHelperTest extends TestCase {
 					return null;
 				}
 			};
+		}
+		
+		@Override
+		public ArooaTools getTools() {
+			return new StandardTools();
 		}
 	}
 	
