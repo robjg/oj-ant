@@ -1,0 +1,4 @@
+<antlib>
+  <componentdef name="oddjob"
+       classname="org.oddjob.ant.OddjobTask"/>
+</antlib>

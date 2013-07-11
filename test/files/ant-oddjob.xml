@@ -5,6 +5,6 @@
 		 classname="org.oddjob.ant.OddjobTask"/>
 	 
 	 <target name="test">
-	 	<oddjob config="oddjob.xml"/>
+	 	<oddjob file="oddjob.xml"/>
 	 </target>
 </project>

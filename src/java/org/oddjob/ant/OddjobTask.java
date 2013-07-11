@@ -3,10 +3,19 @@ package org.oddjob.ant;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.ParseException;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Properties;
+import java.util.Vector;
 
 import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
+import org.apache.tools.ant.taskdefs.Property;
 import org.oddjob.Oddjob;
+import org.oddjob.OddjobBuilder;
+import org.oddjob.arooa.utils.QuoteTokenizerFactory;
 
 /**
  * This is an ant task which runs Oddjob.
@@ -26,28 +35,93 @@ import org.oddjob.Oddjob;
 
 public class OddjobTask extends Task {
 	
+	public static final String ODDJOB_HOME_PROPERTY = "oddjob.home";
+	
 	private File file;
 	
 	private String name;
 	
-	/**
-	 * Set the config file name.
-	 * 
-	 * @param configFile The config file name.
-	 */	
-	public void setConfig(File configFile) {
-		this.file = configFile;
-	}
+	private boolean inheritAll;
 
+	private File oddballsDir;
+	
+	private boolean noOddballs;
+	
+	private String oddballsPath;
+	
+	private String args;
+	
+    /** the properties to pass to the new project */
+    private Vector<Property> properties = new Vector<Property>();
+	
 	/**
-	 * Get the config file name.
-	 * 
-	 * @return The config file name.
-	 */
-	public File getConfig() {
-		return file;
-	}
+	 * Execute the job.
+	 */	
+	@SuppressWarnings("unchecked")
+	public void execute() throws BuildException {
+
+		Project newProject = new Project();
 		
+        Enumeration<Property> enumeration = properties.elements();
+        while (enumeration.hasMoreElements()) {
+            Property p = enumeration.nextElement();
+            p.setProject(newProject);
+            p.execute();
+        }
+
+		Hashtable<?, ?> antProperties = getProject().getProperties();
+		antProperties.putAll(newProject.getProperties());
+		Properties properties = new Properties();
+		properties.putAll(antProperties);
+		
+		OddjobBuilder oddjobBuilder = new OddjobBuilder();
+		
+		String oddjobHome = null;
+		
+		if (antProperties != null) {
+				oddjobHome = (String) antProperties.get(
+						ODDJOB_HOME_PROPERTY);	
+		}
+		
+		oddjobBuilder.setOddjobHome(oddjobHome);
+		
+		File file = this.file;
+		if (file == null) {
+			file = getProject().resolveFile("oddjob.xml");
+		}
+
+		oddjobBuilder.setOddjobFile(file.toString());
+		
+		oddjobBuilder.setName(name);
+		oddjobBuilder.setNoOddballs(noOddballs);
+		oddjobBuilder.setOddballsDir(oddballsDir);
+		oddjobBuilder.setOddballsPath(oddballsPath);
+		
+		try {
+			Oddjob oddjob = oddjobBuilder.buildOddjob();
+			
+			if (args != null) {
+				oddjob.setArgs(new QuoteTokenizerFactory(
+						"\\s+", '"', '\\').newTokenizer().parse(args));
+			}
+			
+			oddjob.setProperties(properties);
+			
+			log("Running Oddjob [" + oddjob.toString() + "], configuration " +
+					file.getCanonicalPath());
+			
+			oddjob.run();
+			
+			log("Ran Oddjob [" + oddjob.toString() + "], state " + 
+					oddjob.lastStateEvent().getState());
+		} 
+		catch (IOException e) {
+		}
+		catch (ParseException e) {
+			throw new BuildException(e);
+		}		
+	}
+	
 	/**
 	 * Set the name.
 	 * 
@@ -66,35 +140,64 @@ public class OddjobTask extends Task {
 		return name;
 	}
 	
-	/**
-	 * Execute the job.
-	 */	
-	public void execute() throws BuildException {
-		
-		File file = this.file;
-		if (file == null) {
-			file = getProject().resolveFile("oddjob.xml");
-		}
+	public boolean isInheritAll() {
+		return inheritAll;
+	}
 
-		Oddjob oddjob = new Oddjob();	
-		oddjob.setFile(file);
-		
-		if (name == null) {
-			oddjob.setName(name);
-		}
-		
-		try {
-			log("Running Oddjob [" + oddjob.toString() + "], configuration " +
-					file.getCanonicalPath());
-		} catch (IOException e) {
-			throw new BuildException(e);
-		}
-		
-		oddjob.run();
-		
-		log("Ran Oddjob [" + oddjob.toString() + "], state " + 
-				oddjob.lastStateEvent().getState());
+	public void setInheritAll(boolean inheritAll) {
+		this.inheritAll = inheritAll;
+	}
 
+    /**
+     * Property to pass to the new project.
+     * The property is passed as a 'user property'.
+     * @return the created <code>Property</code> object.
+     */
+    public Property createProperty() {
+        Property p = new Property();
+        p.setTaskName("property");
+        properties.addElement(p);
+        return p;
+    }
+
+	public File getFile() {
+		return file;
+	}
+
+	public void setFile(File file) {
+		this.file = file;
+	}
+
+	public File getOddballsDir() {
+		return oddballsDir;
+	}
+
+	public void setOddballsDir(File oddballsDir) {
+		this.oddballsDir = oddballsDir;
+	}
+
+	public boolean isNoOddballs() {
+		return noOddballs;
+	}
+
+	public void setNoOddballs(boolean noOddballs) {
+		this.noOddballs = noOddballs;
+	}
+
+	public String getOddballsPath() {
+		return oddballsPath;
+	}
+
+	public void setOddballsPath(String oddballsPath) {
+		this.oddballsPath = oddballsPath;
+	}
+
+	public String getArgs() {
+		return args;
+	}
+
+	public void setArgs(String args) {
+		this.args = args;
 	}
 	
 }

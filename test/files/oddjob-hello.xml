@@ -1,0 +1,5 @@
+<oddjob>
+  <job>
+    <echo>Hello From Oddjob</echo>
+  </job>
+</oddjob>
