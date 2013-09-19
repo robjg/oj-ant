@@ -54,6 +54,7 @@ public class OddballClassLoaderTest extends TestCase {
 		URLClassLoaderType loaderType = new URLClassLoaderType();
 		loaderType.setFiles(all);
 		loaderType.setParent(getClass().getClassLoader());
+		loaderType.configured();
 		
 		OurDirs base = new OurDirs();
 		
@@ -93,6 +94,7 @@ public class OddballClassLoaderTest extends TestCase {
 			URLClassLoaderType loaderType = new URLClassLoaderType();
 			loaderType.setFiles(all);
 			loaderType.setNoInherit(true);
+			loaderType.configured();
 			
 			ClassLoader loader = loaderType.toValue();
 			
@@ -156,6 +158,7 @@ public class OddballClassLoaderTest extends TestCase {
 		URLClassLoaderType loaderType = new URLClassLoaderType();
 		loaderType.setFiles(files);
 		loaderType.setParent(getClass().getClassLoader());
+		loaderType.configured();
 		
 		Oddjob oddjob = new Oddjob();
 		oddjob.setClassLoader(loaderType.toValue());
