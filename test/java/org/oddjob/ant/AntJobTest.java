@@ -16,7 +16,7 @@ import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 import org.oddjob.FailedToStopException;
 import org.oddjob.FragmentHelper;
-import org.oddjob.Helper;
+import org.oddjob.OddjobTestHelper;
 import org.oddjob.Oddjob;
 import org.oddjob.OddjobLookup;
 import org.oddjob.OurDirs;
@@ -395,7 +395,7 @@ public class AntJobTest extends TestCase {
 		AntJob test = new AntJob();
 		test.setArooaSession(session);
 
-		Helper.register(test, session, null);
+		OddjobTestHelper.register(test, session, null);
 		
 		test.setTasks("<tasks><echo message='Hello World'/></tasks>");
 		
@@ -403,7 +403,7 @@ public class AntJobTest extends TestCase {
 		
 		assertEquals(JobState.COMPLETE, test.lastStateEvent().getState());
 		
-		AntJob copy = Helper.copy(test);
+		AntJob copy = OddjobTestHelper.copy(test);
 		
 		assertEquals(JobState.COMPLETE, copy.lastStateEvent().getState());		
 	}

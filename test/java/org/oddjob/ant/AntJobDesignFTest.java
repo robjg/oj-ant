@@ -5,7 +5,7 @@ import java.io.IOException;
 
 import org.apache.log4j.Logger;
 import org.custommonkey.xmlunit.XMLTestCase;
-import org.oddjob.Helper;
+import org.oddjob.OddjobTestHelper;
 import org.oddjob.OddjobDescriptorFactory;
 import org.oddjob.arooa.ArooaDescriptor;
 import org.oddjob.arooa.ArooaParseException;
@@ -61,7 +61,7 @@ public class AntJobDesignFTest extends XMLTestCase {
 		
 		assertEquals(AntJobDesign.class, design.getClass());
 		
-		AntJob test = (AntJob) Helper.createComponentFromConfiguration(
+		AntJob test = (AntJob) OddjobTestHelper.createComponentFromConfiguration(
 				design.getArooaContext().getConfigurationNode());
 		
 		assertEquals("Test", test.getName());
