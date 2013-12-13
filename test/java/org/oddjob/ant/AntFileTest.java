@@ -5,9 +5,9 @@ import java.io.IOException;
 
 import junit.framework.TestCase;
 
-import org.oddjob.OurDirs;
 import org.oddjob.arooa.standard.StandardArooaSession;
 import org.oddjob.io.BufferType;
+import org.oddjob.tools.OurDirs;
 
 public class AntFileTest extends TestCase {
 

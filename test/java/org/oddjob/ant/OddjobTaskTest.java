@@ -1,7 +1,7 @@
 package org.oddjob.ant;
 
 import org.apache.tools.ant.Project;
-import org.oddjob.OurDirs;
+import org.oddjob.tools.OurDirs;
 
 import junit.framework.TestCase;
 

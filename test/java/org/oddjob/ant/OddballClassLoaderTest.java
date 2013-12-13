@@ -6,11 +6,8 @@ import java.io.IOException;
 import junit.framework.TestCase;
 
 import org.apache.log4j.Logger;
-import org.oddjob.ConsoleCapture;
 import org.oddjob.Oddjob;
 import org.oddjob.OddjobLookup;
-import org.oddjob.OddjobSrc;
-import org.oddjob.OurDirs;
 import org.oddjob.arooa.ArooaDescriptor;
 import org.oddjob.arooa.ArooaType;
 import org.oddjob.arooa.beanutils.BeanUtilsPropertyAccessor;
@@ -25,6 +22,9 @@ import org.oddjob.oddballs.DirectoryOddball;
 import org.oddjob.oddballs.Oddball;
 import org.oddjob.oddballs.OddballsDescriptorFactory;
 import org.oddjob.state.ParentState;
+import org.oddjob.tools.ConsoleCapture;
+import org.oddjob.tools.OddjobSrc;
+import org.oddjob.tools.OurDirs;
 import org.oddjob.util.URLClassLoaderType;
 
 public class OddballClassLoaderTest extends TestCase {
