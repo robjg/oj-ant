@@ -1,4 +1,4 @@
 <antlib>
-  <componentdef name="oddjob"
+  <taskdef name="oddjob"
        classname="org.oddjob.ant.OddjobTask"/>
 </antlib>

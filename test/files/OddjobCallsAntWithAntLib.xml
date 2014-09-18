@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<oddjob id="this">
+    <job>
+        <sequential>
+            <jobs>
+                <ant baseDir="${this.dir}" id="myant">
+                    <tasks>
+                        <xml>
+                            <tasks>
+                                <ant antfile="AntWithATaskAntLib.xml"/>
+                            </tasks>
+                        </xml>
+                    </tasks>
+                    <output>
+                        <stdout/>
+                    </output>
+                    <classLoader>
+                        <url-class-loader>
+                            <files>
+                                <file file="${this.dir}/../ant"/>
+                            </files>
+                            <parent>
+                                <value value="${myant.class.classLoader}"/>
+                            </parent>
+                        </url-class-loader>
+                    </classLoader>
+                </ant>
+                <bean class="org.oddjob.util.ClassLoaderDiagnostics" id="diagnostics" resource="custom/antlib.xml">
+                    <classLoader>
+                        <value value="${myant.classLoader}"/>
+                    </classLoader>
+                </bean>
+            </jobs>
+        </sequential>
+    </job>
+</oddjob>

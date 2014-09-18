@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<oddjob id="this">
+  <job>
+    <ant baseDir="${this.dir}" id="myant">
+      <output>
+        <stdout />
+      </output>
+      <tasks>
+        <xml>
+          <tasks>
+            <path id="classpath">
+              <pathelement location="../ant" />
+            </path>
+            <taskdef classname="custom.ATask" classpathref="classpath"
+              name="atask" />
+            <atask/>
+          </tasks>
+        </xml>
+      </tasks>
+    </ant>
+  </job>
+</oddjob>

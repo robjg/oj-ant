@@ -2,6 +2,7 @@ package org.oddjob.ant;
 
 import junit.framework.TestCase;
 
+import org.apache.log4j.Logger;
 import org.apache.tools.ant.BuildEvent;
 import org.apache.tools.ant.BuildListener;
 import org.apache.tools.ant.Project;
@@ -11,6 +12,14 @@ import org.apache.tools.ant.UnknownElement;
 
 public class AntParserTest extends TestCase {
 
+	private static final Logger logger = Logger.getLogger(AntParserTest.class);
+
+	protected void setUp() throws Exception {
+		logger.info("-----------------------  " + getName() + 
+				"  ---------------------");
+		logger.info("stdout is " + System.out);
+	}
+	
 	class MyBuildListener implements BuildListener {
 		String message;
 		

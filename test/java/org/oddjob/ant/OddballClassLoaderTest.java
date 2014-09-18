@@ -2,6 +2,8 @@ package org.oddjob.ant;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintStream;
+import java.lang.reflect.Field;
 
 import junit.framework.TestCase;
 
@@ -35,6 +37,13 @@ public class OddballClassLoaderTest extends TestCase {
 	@Override
 	protected void setUp() throws Exception {
 		logger.info("---------------  " + getName() + " ---------------");
+		logger.info("stdout is " + System.out);
+	}
+	
+	@Override
+	protected void tearDown() throws Exception {
+		super.tearDown();
+		logger.info("stdout is " + System.out);
 	}
 	
 	public void testLoadOddball() throws ClassNotFoundException, IOException {
@@ -72,13 +81,13 @@ public class OddballClassLoaderTest extends TestCase {
 	}
 		
 	public void testClassLoaderOfTasksCreated() 
-	throws ClassNotFoundException, IOException, InstantiationException, IllegalAccessException {
+	throws Exception {
 		
 		ClassLoader existing = Thread.currentThread().getContextClassLoader();
 		
 		Thread.currentThread().setContextClassLoader(null);
 		
-		try {
+		try {			
 			OddjobSrc oddjobHome = new OddjobSrc();
 			
 			FilesType oddjobLib = new FilesType();
@@ -87,9 +96,13 @@ public class OddballClassLoaderTest extends TestCase {
 			File[] files = oddjobLib.toFiles();
 			assertTrue(files.length > 0);
 			
-			File[] all = new File[files.length + 1];
+			File[] all = new File[files.length + 2];
 			all[0] = new File(oddjobHome.oddjobSrcBase() + "/run-oddjob.jar");
-			System.arraycopy(files, 0, all, 1, files.length);
+			// needed for log4j to ensure we don't pick up a test version
+			// because System.out will already be capturing log messages from
+			// previous tests - we don't want these in our console capture.
+			all[1] = new File(oddjobHome.oddjobSrcBase() + "/opt/classes");
+			System.arraycopy(files, 0, all, 2, files.length);
 			
 			URLClassLoaderType loaderType = new URLClassLoaderType();
 			loaderType.setFiles(all);
@@ -184,7 +197,7 @@ public class OddballClassLoaderTest extends TestCase {
 			"    <xml>" +
 			"     <tasks>" +
 			"      <ant antfile='" + 
-						base.relative("test/files/ant-oddjob.xml") + "' " +
+						base.relative("test/files/AntCallsOddjobTaskWithTaskDef.xml") + "' " +
 						"dir='" + base.relative("test/files") + "'/>" +
 			"     </tasks>" +
 			"    </xml>" +

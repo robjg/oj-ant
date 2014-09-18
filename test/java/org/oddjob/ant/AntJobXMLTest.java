@@ -14,6 +14,7 @@ public class AntJobXMLTest extends XMLTestCase {
 	@Override
 	protected void setUp() throws Exception {
 		logger.info("---------------  " + getName() + " ---------------");
+		logger.info("stdout is " + System.out);
 	}
 	
 	static final String LS = System.getProperty("line.separator");

@@ -24,33 +24,39 @@ import org.oddjob.Stoppable;
 import org.oddjob.arooa.deploy.annotations.ArooaAttribute;
 import org.oddjob.arooa.deploy.annotations.ArooaElement;
 import org.oddjob.framework.SerializableJob;
+import org.oddjob.io.Files;
+import org.oddjob.launch.Locator;
 import org.oddjob.util.ClassLoaderDiagnostics;
 import org.oddjob.util.OddjobConfigException;
+import org.oddjob.util.URLClassLoaderType;
 
 /**
  * @oddjob.description Run a series of <a href="http://ant.apache.org">Ant</a>
  * tasks. 
  * 
  * <p>
+ * <em>Not all tasks have been tested!</em>
+ * 
+ * <h3>The Ant Project</h3>
  * Oddjob creates it's own Ant project to use internally this project can be
  * shared between different AntJob jobs using the 'project' attribute. This
  * allows taskdefs and properties to be defined in one place and shared
  * in many jobs.
  * 
- * <p>Oddjob component properties can be referenced inside an Ant tasks using
+ * <h3>Property Expansion</h3>
+ * <p>Oddjob component properties can be referenced inside Ant tasks using
  * the ${id.property} notation. Ant will look up the Oddjob property
  * before it looks up properties defined with the &lt;property&gt; tag.
  * The oddjob derived properties of an Ant task aren't 
  * constant. Oddjob variables can change unlike Ant properties.
  *
  * <p>
- * <em>Not all tasks have been tested.</em>
- * 
- * <p>
  * Note: Ant looks up properties beginning with 'ant.' - Therefore <em>no 
  * component can have an id of 'ant'</em> as the lookup will fail to retrieve the
  * properties from that component (unless of course the 'ant' component implements all
  * the properties that Ant requires!).
+ * 
+ * <h3>ClassLoaders and Task Definitions</h3>
  * 
  * 
  * @oddjob.example
@@ -317,6 +323,18 @@ implements Stoppable {
 	@Override
 	protected void onReset() {
 		project = null;
+	}
+	
+	protected ClassLoader buildAntClassLoader() throws IOException {
+		
+        File sourceJar = Locator.getClassSource(AntJob.class);
+        File jarDir = sourceJar.getParentFile();        
+		
+        URLClassLoaderType classLoaderType = new URLClassLoaderType();
+        classLoaderType.setParent(classLoader);
+        classLoaderType.setFiles(Files.expand(new File(jarDir.getParentFile(), "antlibs/**/*.jar")));
+        
+        return classLoaderType.toValue();
 	}
 	
 	private void writeObject(ObjectOutputStream s) 

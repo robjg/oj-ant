@@ -22,7 +22,8 @@ public class AntJobDesignFTest extends XMLTestCase {
 	private static final Logger logger = Logger.getLogger(AntJobDesignFTest.class);
 	
 	public void setUp() {
-		logger.debug("========================== " + getName() + "===================" );
+		logger.info("========================== " + getName() + "===================" );
+		logger.info("stdout is " + System.out);
 	}
 
 	DesignInstance design;

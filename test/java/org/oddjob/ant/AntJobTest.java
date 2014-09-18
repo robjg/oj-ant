@@ -47,6 +47,7 @@ public class AntJobTest extends TestCase {
 		super.setUp();
 		
 		logger.info("------------------  " + getName() + "-----------------");
+		logger.info("stdout is " + System.out);
 		
 		results = new HashMap<String, Object>();
 	}
@@ -86,6 +87,8 @@ public class AntJobTest extends TestCase {
 				String.class);
 		
 		assertTrue(version.startsWith("Apache Ant"));
+		
+		logger.info("stdout is " + System.out);
 		
 		oddjob.destroy();
 	}
@@ -261,27 +264,22 @@ public class AntJobTest extends TestCase {
 		
 	}
 
+	public static void compileATask(OurDirs dirs) {
+		
+		CompileJob compile = new CompileJob();
+		compile.setFiles(new File[] {
+				dirs.relative("test/ant/custom/ATask.java")
+		});
+
+		compile.run();
+		
+		assertEquals(0, compile.getResult());
+		
+	}
+	
+	
 	/**
 	 * Test setting a classpath for a taskdef.
-	 * 
-	 * To prove the test works we must have a task which is 
-	 * outside of the project classpath. To this end we first
-	 * use the javac task - and this provides a nice example
-	 * of the nightmares of class loading because when running
-	 * from eclipse the compiler lives outside the standard
-	 * classpath and the javac task uses the default class loader
-	 * only to try and load the compile. To get round this we 
-	 * use an ArooaClassLoader that loads tasks on a 
-	 * classpath that includes the compiler but loads Project
-	 * etc on the default classpath. This is because AntJob loads
-	 * project using the default classloader, and we are using
-	 * a parent first ArooaClassLoader, so javac loads it's own
-	 * project which is in a different ClassLoader namespace!!
-	 * 
-	 * Other options to avoid this would be to load Project, Target
-	 * etc on a the Context ClassLoader - but this would require
-	 * a lot of reflection or to create a separate oj.ant.jar which
-	 * could be loaded on a separate classloader.
 	 * 
 	 * @throws Exception
 	 */
@@ -289,14 +287,7 @@ public class AntJobTest extends TestCase {
 
 		OurDirs dirs = new OurDirs();
 		
-		CompileJob compile = new CompileJob();
-		compile.setFiles(new File[] {
-				dirs.relative("test/ant/ATask.java")
-		});
-
-		compile.run();
-		
-		assertEquals(0, compile.getResult());
+		compileATask(dirs);
 		
 		ClassLoaderDiagnostics diagnostics = 
 			new ClassLoaderDiagnostics();
@@ -306,48 +297,22 @@ public class AntJobTest extends TestCase {
 		
 		diagnostics.run();
 		
-		String config =
-			"<oddjob id='this'>" +
-			" <job>" +
-			"  <sequential>" +
-			"   <jobs>" +
-			"    <ant id='a' baseDir='${this.args[0]}'>" +
-			"     <tasks>" +
-			"      <xml>" +
-			"       <tasks>" +
-//			"     <javac srcdir='test/ant'" +
-//			"		     destdir='test/ant'>" +
-//			"      <classpath>" +
-//			"        <pathelement location='lib/ant.jar'/>" +
-//			"      </classpath>" +
-//			"     </javac>" +
-			"     <path id='classpath'>" + 
-			"      <pathelement location='test/ant'/>" +
-			"     </path>" +
-			"     <taskdef name='result' classname='ATask'" +
-			"              classpathref='classpath'/>" +
-			"     <result/>" +
-			"       </tasks>" +
-			"      </xml>" +
-			"     </tasks>" +
-			"    </ant>" +
-			"   </jobs>" +
-			"  </sequential>" +
-			" </job>" +
-			"</oddjob>";
 		
-		Oddjob oj = new Oddjob();
+		Oddjob oddjob = new Oddjob();
 		
-		oj.setConfiguration(new XMLConfiguration("XML", config));
-		oj.setArgs(new String[] { dirs.base().toString() });
-		oj.run();
+		File config = dirs.relative("test/files/AntTaskDefWithClasspath.xml");
 		
-		assertEquals(ParentState.COMPLETE, oj.lastStateEvent().getState());
+		oddjob.setFile(config);
+		oddjob.setArgs(new String[] { dirs.base().toString() });
+		oddjob.run();
+		
+		assertEquals(ParentState.COMPLETE, oddjob.lastStateEvent().getState());
 
-		AntJob aj = new OddjobLookup(oj).lookup("a", AntJob.class);
+		AntJob antJob = new OddjobLookup(oddjob).lookup("myant", AntJob.class);
 		
-		assertEquals("Worked", aj.getProject().getProperty("test.result"));
-		
+		assertEquals("Worked", antJob.getProject().getProperty("test.result"));
+	
+		oddjob.destroy();
 	}
 	
 	public static class Exists extends Task {
@@ -362,6 +327,7 @@ public class AntJobTest extends TestCase {
 	
 	
 	public void testBaseDir() {
+		
 		String config = 
 			"<oddjob id='this'>" +
 			" <job>" +
@@ -370,7 +336,7 @@ public class AntJobTest extends TestCase {
 			"    <xml>" +
 			"     <tasks>" +
 			"    <taskdef name='result' classname='" + Exists.class.getName() + "'/>" +
-			"	 <result file='ATask.java'/>" +
+			"	 <result file='custom/ATask.java'/>" +
 			"     </tasks>" +
 			"    </xml>" +
 			"   </tasks>" +

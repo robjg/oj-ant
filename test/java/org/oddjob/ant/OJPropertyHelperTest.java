@@ -2,6 +2,7 @@ package org.oddjob.ant;
 
 import junit.framework.TestCase;
 
+import org.apache.log4j.Logger;
 import org.apache.tools.ant.BuildEvent;
 import org.apache.tools.ant.BuildListener;
 import org.apache.tools.ant.DefaultLogger;
@@ -23,6 +24,14 @@ import org.oddjob.values.types.PropertyType;
 
 public class OJPropertyHelperTest extends TestCase {
 
+	private static final Logger logger = Logger.getLogger(AntFileTest.class);
+
+	protected void setUp() throws Exception {
+		logger.info("-----------------------  " + getName() + 
+				"  ---------------------");
+		logger.info("stdout is " + System.out);
+	}
+	
 	private class OurLookup extends MockBeanRegistry {
 
 		public <T> T lookup(String fullPath, Class<T> type) {

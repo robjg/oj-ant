@@ -1,0 +1,4 @@
+<antlib>
+  <taskdef name="atask"
+       classname="custom.ATask"/>
+</antlib>
