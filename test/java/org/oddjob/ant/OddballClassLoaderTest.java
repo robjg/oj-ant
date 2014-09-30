@@ -2,8 +2,6 @@ package org.oddjob.ant;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.PrintStream;
-import java.lang.reflect.Field;
 
 import junit.framework.TestCase;
 
