@@ -31,7 +31,8 @@ public class AntJobDesignFTest extends XMLTestCase {
 	public void testCreate() throws ArooaParseException, SAXException, IOException {
 		
 		String xml = 
-				"<ant name='Test' project='${myproject}' messageLevel='ERR'>" +
+				"<ant name='Test' project='${myproject}' messageLevel='ERR'" +
+				"	classPath='x/y/*.jar'>" +
 				" <tasks>" +
 				"  <xml>" +
 				"   <echo message='Hello'/>" +
@@ -74,7 +75,8 @@ public class AntJobDesignFTest extends XMLTestCase {
 		assertEquals("URLClassLoader: " + 
 				new File("mystuff.jar").getAbsolutePath(), 
 				test.getClassLoader().toString());
-		
+
+		assertEquals("x/y/*.jar", test.getClassPath());
 		assertEquals("ERR", test.getMessageLevel());
 	}
 

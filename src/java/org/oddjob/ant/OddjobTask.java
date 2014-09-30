@@ -57,7 +57,6 @@ public class OddjobTask extends Task {
 	/**
 	 * Execute the job.
 	 */	
-	@SuppressWarnings("unchecked")
 	public void execute() throws BuildException {
 
 		Project newProject = new Project();
@@ -69,7 +68,7 @@ public class OddjobTask extends Task {
             p.execute();
         }
 
-		Hashtable<?, ?> antProperties = getProject().getProperties();
+		Hashtable<String, Object> antProperties = getProject().getProperties();
 		antProperties.putAll(newProject.getProperties());
 		Properties properties = new Properties();
 		properties.putAll(antProperties);

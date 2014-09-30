@@ -109,36 +109,67 @@ public class CommandLineAntJobTest extends TestCase {
 		exec.destroy();
 	}
 	
-//	public void testAntLibWithAntClassLoader() throws InterruptedException {
-//		
-//		OurDirs dirs = new OurDirs();
-//		
-//		AntJobTest.compileATask(dirs);
-//		
-//		ConsoleCapture console = new ConsoleCapture();
-//		
-//		File oddjobFile = dirs.relative("test/files/OddjobCallsAntWithAntLib.xml");
-//
-//		File antOddball = dirs.base();
-//		
-//		ExecJob exec = new ExecJob();
-//		exec.setCommand("java -jar " + relative(RUN_JAR) + 
-//				" -nb -op " + antOddball + " -f " + oddjobFile);
-//		console.capture(exec.consoleLog());
-//		
-//		exec.run();
-//		
-//		console.close();
-//		console.dump();
-//		
-//		assertEquals(0, exec.getExitValue());
-//		
-//		String[] lines = console.getLines();
-//		
-//		assertEquals("[result] ATask Worked.", lines[0].trim());
-//		
-//		assertEquals(1, lines.length);
-//
-//		exec.destroy();
-//	}
+	public void testAntLibWithAntClassLoader() throws InterruptedException {
+		
+		OurDirs dirs = new OurDirs();
+		
+		AntJobTest.compileATask(dirs);
+		
+		ConsoleCapture console = new ConsoleCapture();
+		
+		File oddjobFile = dirs.relative("test/files/OddjobCallsAntWithAntLib.xml");
+
+		File antOddball = dirs.base();
+		
+		ExecJob exec = new ExecJob();
+		exec.setCommand("java -jar " + relative(RUN_JAR) + 
+				" -nb -op " + antOddball + " -f " + oddjobFile);
+		console.capture(exec.consoleLog());
+		
+		exec.run();
+		
+		console.close();
+		console.dump();
+		
+		assertEquals(0, exec.getExitValue());
+		
+		String[] lines = console.getLines();
+		
+		assertEquals("test:", lines[1].trim());
+		assertEquals("Ant Job Failed as expected!", lines[lines.length - 1].trim());
+		
+		exec.destroy();
+	}
+	
+	public void testOddjobLaunchAntLib() throws InterruptedException {
+		
+		OurDirs dirs = new OurDirs();
+		
+		AntJobTest.compileATask(dirs);
+		
+		ConsoleCapture console = new ConsoleCapture();
+		
+		File oddjobFile = dirs.relative("test/files/OddjobLaunchWithAntLib.xml");
+
+		File antOddball = dirs.base();
+		
+		ExecJob exec = new ExecJob();
+		exec.setCommand("java -jar " + relative(RUN_JAR) + 
+				" -nb -op " + antOddball + " -f " + oddjobFile);
+		console.capture(exec.consoleLog());
+		
+		exec.run();
+		
+		console.close();
+		console.dump();
+		
+		assertEquals(0, exec.getExitValue());
+		
+		String[] lines = console.getLines();
+		
+		assertEquals("test:", lines[2].trim());
+		assertEquals("BUILD SUCCESSFUL", lines[lines.length - 2].trim());
+		
+		exec.destroy();
+	}
 }

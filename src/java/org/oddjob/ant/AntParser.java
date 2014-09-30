@@ -50,7 +50,7 @@ public class AntParser extends ProjectHelper2 {
 		project.getBaseDir();
 		
         AntXMLContext context = new AntXMLContext(project);
-        context.setCurrentTargets(new HashMap<Object, Object>());        
+        context.setCurrentTargets(new HashMap<String, Target>());        
 
         project.addReference("ant.parsing.context", context);
         project.addReference("ant.targets", context.getTargets());
@@ -162,7 +162,6 @@ public class AntParser extends ProjectHelper2 {
          *
          * @exception SAXParseException if an unexpected attribute is encountered.
          */
-        @SuppressWarnings("unchecked")
 		public void onStartElement(String uri, String tag, String qname,
                                    Attributes attrs,
                                    AntXMLContext context)

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<oddjob id="this">
+    <job>
+        <sequential>
+            <jobs>
+                <variables id="vars">
+                    <ojAntHome>
+                        <file file="${this.dir}/../.."/>
+                    </ojAntHome>
+                    <classPath>
+                        <files>
+                            <list>
+                                <files files="${vars.ojAntHome}/classes"/>
+                                <files files="${vars.ojAntHome}/lib/*.jar"/>
+                                <file file="${this.dir}/../ant"/>
+                            </list>
+                        </files>
+                    </classPath>
+                </variables>
+                <launch className="org.oddjob.ant.AntMainOverride">
+                    <args>
+                        <list>
+                            <values>
+                                <value value="-f"/>
+                                <file file="${this.dir}/AntWithATaskAntLib.xml"/>
+                            </values>
+                        </list>
+                    </args>
+                    <classLoader>
+                        <url-class-loader>
+                            <files>
+                                <value value="${vars.classPath}"/>
+                            </files>
+                        </url-class-loader>
+                    </classLoader>
+                </launch>
+            </jobs>
+        </sequential>
+    </job>
+</oddjob>

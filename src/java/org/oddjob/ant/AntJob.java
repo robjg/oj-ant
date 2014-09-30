@@ -19,6 +19,7 @@ import org.apache.tools.ant.DefaultLogger;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.PropertyHelper;
 import org.apache.tools.ant.Target;
+import org.apache.tools.ant.types.Path;
 import org.apache.tools.ant.util.StringUtils;
 import org.oddjob.Stoppable;
 import org.oddjob.arooa.deploy.annotations.ArooaAttribute;
@@ -57,6 +58,12 @@ import org.oddjob.util.URLClassLoaderType;
  * the properties that Ant requires!).
  * 
  * <h3>ClassLoaders and Task Definitions</h3>
+ * <p>
+ * A class path or class loader can be supplied and this will be used for
+ * task definitions and antlibs. Name space antlibs will only work if
+ * the antlib is placed in the oj-ant/lib directory. This is
+ * becuase name space ant libs require the ant lib to be loaded in the same 
+ * class loader as Ant.
  * 
  * 
  * @oddjob.example
@@ -129,7 +136,7 @@ implements Stoppable {
 	 * DEBUG, ERROR, INFO, VERBOSE, WARN.
 	 * @oddjob.required No.
 	 */
-	private transient String messageLevel;
+	private volatile transient String messageLevel;
 	
 	/** 
 	 * @oddjob.property 
@@ -137,7 +144,7 @@ implements Stoppable {
 	 * @oddjob.required No. By default the output will only be written to 
 	 * the logger.
 	 */
-	private transient OutputStream output;
+	private volatile transient OutputStream output;
 	
 	/** 
 	 * @oddjob.property 
@@ -149,7 +156,7 @@ implements Stoppable {
 	 * 
 	 * @oddjob.required Yes.
 	 */
-	private transient String tasks;
+	private volatile transient String tasks;
 	
 	/** 
 	 * @oddjob.property 
@@ -157,7 +164,7 @@ implements Stoppable {
 	 * basedir attribute of an ant project.
 	 * @oddjob.required No.
 	 */
-	private transient File baseDir;
+	private volatile transient File baseDir;
 	
 	/** 
 	 * @oddjob.property 
@@ -165,17 +172,28 @@ implements Stoppable {
 	 * failure will in an EXCEPTION state for this job.
 	 * @oddjob.required No, defaults to false.
 	 */
-	private transient boolean exception;
+	private volatile transient boolean exception;
 
+	/** 
+	 * @oddjob.property 
+	 * @oddjob.description A class path to use to create Ants class loader.
+	 * This is often more convenient than providing a separate class loader.
+	 * If a class loader is also provided then it will be used as the parent
+	 * class loader of the class loader created from this path, otherwise
+	 * the class loader of this job will be used as the parent.
+	 * @oddjob.required No.
+	 */
+	private volatile String classPath;
+	
 	/** 
 	 * @oddjob.property 
 	 * @oddjob.description An optional class loader which will be set as
 	 * Ant's class loader.
 	 * @oddjob.required No.
 	 */
-	private transient ClassLoader classLoader;
+	private volatile transient ClassLoader classLoader;
 	
-	
+	/** So we can interrupt. */
 	private volatile transient Thread executionThread;
 	
 	
@@ -243,15 +261,24 @@ implements Stoppable {
 		
 		if (project == null) {
 			project = new Project();			
-			if (classLoader != null) {
+			if (baseDir != null) {
+				project.setBaseDir(baseDir);
+			}
+			else if (classPath != null) {
+				Path path = new Path(project, classPath);
+				ClassLoader parentClassLoader = this.classLoader;
+				if (parentClassLoader == null) {
+					parentClassLoader = getClass().getClassLoader();
+				}
+				classLoader = project.createClassLoader(parentClassLoader, path);
+				project.setCoreLoader(classLoader);
+			}
+			else if (classLoader != null) {
 				logger().debug("Setting classloader to: " + classLoader);
 			    project.setCoreLoader(classLoader);
 			}
 			else {
 				project.setCoreLoader(getClass().getClassLoader());
-			}
-			if (baseDir != null) {
-				project.setBaseDir(baseDir);
 			}
 			project.init();
 		}
@@ -533,5 +560,13 @@ implements Stoppable {
 			return null;
 		}
 		return project.getProperty("ant.version");
+	}
+
+	public String getClassPath() {
+		return classPath;
+	}
+
+	public void setClassPath(String classPath) {
+		this.classPath = classPath;
 	}
 }

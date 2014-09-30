@@ -44,6 +44,8 @@ class AntJobDesign extends BaseDC {
 
 	private final SimpleTextAttribute exception;
 
+	private final SimpleTextAttribute classPath;
+	
 	private final SimpleDesignProperty classLoader;
 	
 	public AntJobDesign(ArooaElement element, ArooaContext parentContext) {
@@ -61,6 +63,8 @@ class AntJobDesign extends BaseDC {
 
 		exception = new SimpleTextAttribute("exception", this);
 		
+		classPath = new SimpleTextAttribute("classPath", this);
+		
 		classLoader = new SimpleDesignProperty("classLoader", this);
 	}
 	
@@ -68,7 +72,7 @@ class AntJobDesign extends BaseDC {
 		return new DesignProperty[] { 
 				name, project, 
 				baseDir, tasks, messageLevel, 
-				output, exception, classLoader };
+				output, exception, classPath, classLoader };
 	}
 	
 	public Form detail() {
@@ -82,6 +86,7 @@ class AntJobDesign extends BaseDC {
 					.add(messageLevel.view().setTitle("Message Level"))
 					.add(output.view().setTitle("Output"))
 					.add(exception.view().setTitle("Exception"))
+					.add(classPath.view().setTitle("ClassPath"))
 					.add(classLoader.view().setTitle("Class Loader"))
 				);
 	}
