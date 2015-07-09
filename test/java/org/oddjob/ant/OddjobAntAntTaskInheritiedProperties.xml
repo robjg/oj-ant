@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<oddjob id="this">
+    <job>
+        <sequential>
+            <jobs>
+                <properties>
+                    <values>
+                        <value key="favourite.fruit" value="Apples"/>
+                    </values>
+                </properties>
+                <ant>
+                    <tasks>
+                        <xml>
+                            <tasks>
+                                <ant antfile="${this.dir}/ant-file.xml" target="test-param"/>
+                            </tasks>
+                        </xml>
+                    </tasks>
+                    <output>
+                        <identify id="results">
+                            <value>
+                                <buffer/>
+                            </value>
+                        </identify>
+                    </output>
+                </ant>
+            </jobs>
+        </sequential>
+    </job>
+</oddjob>

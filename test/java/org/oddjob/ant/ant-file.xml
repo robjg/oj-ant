@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+	<target name="test">
+		<echo message="${ant.file}"/>
+	</target>
+	<target name="test-param">
+		<echo message="${favourite.fruit}"/>
+	</target>
+</project>

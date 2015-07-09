@@ -24,6 +24,7 @@ import org.apache.tools.ant.util.StringUtils;
 import org.oddjob.Stoppable;
 import org.oddjob.arooa.deploy.annotations.ArooaAttribute;
 import org.oddjob.arooa.deploy.annotations.ArooaElement;
+import org.oddjob.arooa.runtime.PropertyLookup;
 import org.oddjob.framework.SerializableJob;
 import org.oddjob.io.Files;
 import org.oddjob.launch.Locator;
@@ -296,8 +297,11 @@ implements Stoppable {
 			OJPropertyHelper ourPropertyHelper = new OJPropertyHelper(
 					getArooaSession());
 					
-			PropertyHelper ph = PropertyHelper.getPropertyHelper(project);
-			ph.add(ourPropertyHelper);
+			PropertyHelper propertyHelper = 
+					PropertyHelper.getPropertyHelper(project);
+			propertyHelper.add(ourPropertyHelper);
+			
+			ineritProperties(propertyHelper);
 			
 			AntParser parser = new AntParser(project);
 			
@@ -350,6 +354,15 @@ implements Stoppable {
 	@Override
 	protected void onReset() {
 		project = null;
+	}
+	
+	protected void ineritProperties(PropertyHelper propertyHelper) {
+		PropertyLookup managers = getArooaSession().getPropertyManager();
+		
+			for (String name : managers.propertyNames()) {
+				String value = managers.lookup(name);
+				propertyHelper.setInheritedProperty(name, value);
+			}
 	}
 	
 	protected ClassLoader buildAntClassLoader() throws IOException {

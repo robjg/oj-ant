@@ -6,9 +6,12 @@ import java.io.IOException;
 import junit.framework.TestCase;
 
 import org.apache.log4j.Logger;
+import org.oddjob.Oddjob;
+import org.oddjob.OddjobLookup;
+import org.oddjob.arooa.convert.ArooaConversionException;
+import org.oddjob.arooa.reflect.ArooaPropertyException;
 import org.oddjob.arooa.standard.StandardArooaSession;
 import org.oddjob.io.BufferType;
-import org.oddjob.tools.OurDirs;
 
 public class AntFileTest extends TestCase {
 
@@ -24,11 +27,12 @@ public class AntFileTest extends TestCase {
 	
 	public void testAntFile() throws IOException {
 		
-		OurDirs dirs = new OurDirs();
+		File antFile = new File(
+				getClass().getResource("ant-file.xml").getFile());
 		
 		String xml = 
 			"<tasks>" +
-			" <ant antfile='" + dirs.base() + "/test/files/ant-file.xml' " +
+			" <ant antfile='" + antFile.getPath() + "' " +
 			"      inheritAll='false' target='test'/>" +
 			"</tasks>";
 		
@@ -46,10 +50,28 @@ public class AntFileTest extends TestCase {
 		
 		String expected = EOL + 
 			"test:" + EOL +
-			"     [echo] " + new File(dirs.base() + "/test/files/ant-file.xml").getCanonicalPath() + EOL;
+			"     [echo] " + antFile.getCanonicalPath() + EOL;
 					
 		assertEquals(expected, result);
 	}
 	
-	
+	public void testOddjobAntWithAntTaskInheritsProperties() throws ArooaPropertyException, ArooaConversionException {
+		
+		File file = new File(
+				getClass().getResource("OddjobAntAntTaskInheritiedProperties.xml").getFile());
+		
+		Oddjob oddjob = new Oddjob();
+		oddjob.setFile(file);
+		
+		oddjob.run();
+		
+		String result = new OddjobLookup(oddjob).lookup(
+				"results", String.class);
+		
+		String expected = EOL + 
+				"test-param:" + EOL +
+				"     [echo] Apples" + EOL;
+						
+			assertEquals(expected, result);
+	}
 }
