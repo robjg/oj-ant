@@ -130,7 +130,7 @@ public class OddballClassLoaderTest extends TestCase {
 					base.relative("test/files/classloader-test.xml"));
 			
 			ConsoleCapture console = new ConsoleCapture();
-			console.capture(Oddjob.CONSOLE);
+			console.captureConsole();
 			
 			oddjob.run();		
 			
@@ -207,7 +207,7 @@ public class OddballClassLoaderTest extends TestCase {
 		oddjob.setConfiguration(new XMLConfiguration("XML", xml));
 		
 		ConsoleCapture console = new ConsoleCapture();
-		console.capture(Oddjob.CONSOLE);
+		console.captureConsole();
 		
 		oddjob.run();
 
