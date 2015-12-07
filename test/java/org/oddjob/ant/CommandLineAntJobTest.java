@@ -49,8 +49,6 @@ public class CommandLineAntJobTest extends TestCase {
 		
 		AntJobTest.compileATask(dirs);
 		
-		ConsoleCapture console = new ConsoleCapture();
-		
 		File oddjobFile = dirs.relative("test/files/AntTaskDefWithClasspath.xml");
 
 		File antOddball = dirs.base();
@@ -58,11 +56,13 @@ public class CommandLineAntJobTest extends TestCase {
 		ExecJob exec = new ExecJob();
 		exec.setCommand("java -jar " + relative(RUN_JAR) + 
 				" -nb -op " + antOddball + " -f " + oddjobFile);
-		console.capture(exec.consoleLog());
 		
-		exec.run();
+		ConsoleCapture console = new ConsoleCapture();
+		try (ConsoleCapture.Close close = console.capture(exec.consoleLog())) {
+			
+			exec.run();
+		}
 		
-		console.close();
 		console.dump();
 		
 		assertEquals(0, exec.getExitValue());
@@ -82,8 +82,6 @@ public class CommandLineAntJobTest extends TestCase {
 		
 		AntJobTest.compileATask(dirs);
 		
-		ConsoleCapture console = new ConsoleCapture();
-		
 		File oddjobFile = dirs.relative("test/files/AntTaskDefWithAntLib.xml");
 
 		File antOddball = dirs.base();
@@ -91,11 +89,13 @@ public class CommandLineAntJobTest extends TestCase {
 		ExecJob exec = new ExecJob();
 		exec.setCommand("java -jar " + relative(RUN_JAR) + 
 				" -nb -op " + antOddball + " -f " + oddjobFile);
-		console.capture(exec.consoleLog());
 		
-		exec.run();
+		ConsoleCapture console = new ConsoleCapture();
+		try (ConsoleCapture.Close close = console.capture(exec.consoleLog())) {
+			
+			exec.run();
+		}
 		
-		console.close();
 		console.dump();
 		
 		assertEquals(0, exec.getExitValue());
@@ -115,8 +115,6 @@ public class CommandLineAntJobTest extends TestCase {
 		
 		AntJobTest.compileATask(dirs);
 		
-		ConsoleCapture console = new ConsoleCapture();
-		
 		File oddjobFile = dirs.relative("test/files/OddjobCallsAntWithAntLib.xml");
 
 		File antOddball = dirs.base();
@@ -124,11 +122,13 @@ public class CommandLineAntJobTest extends TestCase {
 		ExecJob exec = new ExecJob();
 		exec.setCommand("java -jar " + relative(RUN_JAR) + 
 				" -nb -op " + antOddball + " -f " + oddjobFile);
-		console.capture(exec.consoleLog());
 		
-		exec.run();
+		ConsoleCapture console = new ConsoleCapture();
+		try (ConsoleCapture.Close close = console.capture(exec.consoleLog())) {
+			
+			exec.run();
+		}
 		
-		console.close();
 		console.dump();
 		
 		assertEquals(0, exec.getExitValue());
@@ -147,8 +147,6 @@ public class CommandLineAntJobTest extends TestCase {
 		
 		AntJobTest.compileATask(dirs);
 		
-		ConsoleCapture console = new ConsoleCapture();
-		
 		File oddjobFile = dirs.relative("test/files/OddjobLaunchWithAntLib.xml");
 
 		File antOddball = dirs.base();
@@ -156,11 +154,13 @@ public class CommandLineAntJobTest extends TestCase {
 		ExecJob exec = new ExecJob();
 		exec.setCommand("java -jar " + relative(RUN_JAR) + 
 				" -nb -op " + antOddball + " -f " + oddjobFile);
-		console.capture(exec.consoleLog());
 		
-		exec.run();
+		ConsoleCapture console = new ConsoleCapture();
+		try (ConsoleCapture.Close close = console.capture(exec.consoleLog())) {
+			
+			exec.run();
+		}
 		
-		console.close();
 		console.dump();
 		
 		assertEquals(0, exec.getExitValue());
