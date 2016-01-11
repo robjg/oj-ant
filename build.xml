@@ -52,10 +52,10 @@
 		<property name="build.src"       	value="${build.dir}/src"/>
 		<property name="build.classes"   	value="${build.dir}/classes"/>
 		<property name="build.test"      	value="${build.dir}/test"/>
-		<property name="build.test.classes" value="${build.test}/classes"/>
 		<property name="build.lib"       	value="${build.dir}/lib"/>
 
-		<property name="test.reports" value="${build.test}/reports"/>
+		<property name="build.test.classes" value="${build.test}/classes"/>
+		<property name="test.reports" 		value="${build.test}/reports"/>
 		
 		<property name="jar.name"        value="${name}-${build.version}.jar"/>
 
@@ -78,6 +78,8 @@
 	
 	<target name="prepare" depends="init">
 
+		<ivy:retrieve conf="default"/>
+		
 		<ivy:resolve conf="provided" refresh="true" />
 		
 		<ivy:resolve conf="test" refresh="true" />
@@ -95,7 +97,6 @@
 		</path>
 
 		<path id="test-classpath">
-			<path refid="classpath"/>
 			<pathelement path="${build.classes}" />
 			<path refid="test-cachepath"/>
 		</path>
@@ -158,7 +159,7 @@
 	<!-- =================================================================== -->
 	<!-- Creates the jar file                                                -->
 	<!-- =================================================================== -->
-	<target name="jar" depends="compile-tests" description="Generates the jar packages">
+	<target name="jar" depends="compile" description="Generates the jar packages">
 		
 	    <jar destfile="${lib.dir}/${jar.name}"
 	         basedir="${build.classes}">
@@ -194,12 +195,12 @@
 
 	</target>
 
-	<target name="all-tests" depends="jar" description="Perform jUnit tests">
+	<target name="all-tests" depends="compile-tests" description="Perform jUnit tests">
 		<mkdir dir="${work.dir}"/>
 		<mkdir dir="${test.reports}"/>
 		
 		<junit printsummary="yes" haltonfailure="no" 
-				failureproperty="junit.failure" fork="yes">
+				failureproperty="junit.failure" fork="yes" forkMode="once">
 			<classpath>
 				<pathelement location="${build.test.classes}" />
 			</classpath>
