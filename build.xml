@@ -279,6 +279,8 @@
 		<copy todir="${to.dir}">
 			<fileset dir=".">
 				<include name="build.xml"/>
+                <include name="ivy.xml"/>
+                <include name="ivysettings.xml"/>
 			</fileset>
 		</copy>
 
@@ -294,9 +296,7 @@
 		
 		<!-- And now the jars -->
 		<copy todir="${to.lib}">
-			<fileset dir="${lib.dir}">
-				<include name="*.jar"/>
-			</fileset>
+			<fileset dir="${lib.dir}"/>
 		</copy>
 
 	</target>
