@@ -1,9 +1,15 @@
 package org.oddjob.ant;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.After;
+
+import org.junit.Test;
+import org.junit.rules.TestName;
 
 import java.io.File;
 import java.io.IOException;
 
-import junit.framework.TestCase;
+import org.junit.Assert;
 
 import org.apache.log4j.Logger;
 import org.oddjob.Oddjob;
@@ -27,23 +33,26 @@ import org.oddjob.tools.OddjobSrc;
 import org.oddjob.tools.OurDirs;
 import org.oddjob.util.URLClassLoaderType;
 
-public class OddballClassLoaderTest extends TestCase {
+public class OddballClassLoaderTest extends Assert {
 
 	private static final Logger logger = Logger.getLogger(
 			OddballClassLoaderTest.class);
 	
-	@Override
-	protected void setUp() throws Exception {
-		logger.info("---------------  " + getName() + " ---------------");
+	@Rule public TestName name = new TestName();
+
+	@Before
+    public void setUp() throws Exception {
+		logger.info("---------------  " + name.getMethodName() + " ---------------");
 		logger.info("stdout is " + System.out);
 	}
 	
-	@Override
-	protected void tearDown() throws Exception {
-		super.tearDown();
+    @After
+    public void tearDown() throws Exception {
+
 		logger.info("stdout is " + System.out);
 	}
 	
+    @Test
 	public void testLoadOddball() throws ClassNotFoundException, IOException {
 		
 		OddjobSrc oddjobHome = new OddjobSrc();
@@ -78,6 +87,7 @@ public class OddballClassLoaderTest extends TestCase {
 		assertNotNull(cl);
 	}
 		
+    @Test
 	public void testClassLoaderOfTasksCreated() 
 	throws Exception {
 		
@@ -153,6 +163,7 @@ public class OddballClassLoaderTest extends TestCase {
 	
 	String EOL = System.getProperty("line.separator");
 	
+    @Test
 	public void testClassLoaderOfSubProject() 
 	throws ClassNotFoundException, IOException, ArooaPropertyException, ArooaConversionException {
 		

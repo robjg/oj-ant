@@ -1,6 +1,9 @@
 package org.oddjob.ant;
-
-import junit.framework.TestCase;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.TestName;
+import org.junit.Assert;
 
 import org.apache.log4j.Logger;
 import org.apache.tools.ant.BuildEvent;
@@ -22,12 +25,15 @@ import org.oddjob.arooa.standard.StandardArooaSession;
 import org.oddjob.arooa.standard.StandardTools;
 import org.oddjob.values.types.PropertyType;
 
-public class OJPropertyHelperTest extends TestCase {
+public class OJPropertyHelperTest extends Assert {
 
 	private static final Logger logger = Logger.getLogger(AntFileTest.class);
 
-	protected void setUp() throws Exception {
-		logger.info("-----------------------  " + getName() + 
+	@Rule public TestName name = new TestName();
+	
+    @Before
+    public void setUp() throws Exception {
+		logger.info("-----------------------  " + name.getMethodName() + 
 				"  ---------------------");
 		logger.info("stdout is " + System.out);
 	}
@@ -88,6 +94,7 @@ public class OJPropertyHelperTest extends TestCase {
 		}
 	}
 	
+    @Test
 	public void testWithProject() throws Exception {
 		MyBuildListener listener = new MyBuildListener();
 		
@@ -118,6 +125,7 @@ public class OJPropertyHelperTest extends TestCase {
 	}
 
 	
+    @Test
 	public void testArooaValueWithProject() throws ArooaParseException {
 
 		PropertyType root = new PropertyType();

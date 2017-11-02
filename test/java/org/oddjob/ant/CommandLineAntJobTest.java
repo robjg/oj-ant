@@ -1,9 +1,13 @@
 package org.oddjob.ant;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.TestName;
 
 import java.io.File;
 import java.io.IOException;
 
-import junit.framework.TestCase;
+import org.junit.Assert;
 
 import org.apache.log4j.Logger;
 import org.oddjob.jobs.ExecJob;
@@ -11,7 +15,7 @@ import org.oddjob.tools.ConsoleCapture;
 import org.oddjob.tools.OddjobSrc;
 import org.oddjob.tools.OurDirs;
 
-public class CommandLineAntJobTest extends TestCase {
+public class CommandLineAntJobTest extends Assert {
 	
 	private static final Logger logger = Logger.getLogger(
 			CommandLineAntJobTest.class);
@@ -20,12 +24,14 @@ public class CommandLineAntJobTest extends TestCase {
 	
 	final static String EOL = System.getProperty("line.separator");
 	
+	@Rule public TestName name = new TestName();
+
 	/** The oddjob project dir */
 	File oddjobHome;
 		
-	@Override
-	protected void setUp() throws Exception {
-		logger.info("---------------- " + getName() + " -----------------");
+    @Before
+    public void setUp() throws Exception {
+		logger.info("---------------- " + name.getMethodName() + " -----------------");
 		logger.info("stdout is " + System.out);
 		
 		this.oddjobHome = new OddjobSrc().oddjobSrcBase();		
@@ -43,6 +49,7 @@ public class CommandLineAntJobTest extends TestCase {
 		}
 	}
 	
+    @Test
 	public void testTaskDefWithClasspath() throws InterruptedException {
 		
 		OurDirs dirs = new OurDirs();
@@ -76,6 +83,7 @@ public class CommandLineAntJobTest extends TestCase {
 		exec.destroy();
 	}
 
+    @Test
 	public void testTaskDefWithAntLib() throws InterruptedException {
 		
 		OurDirs dirs = new OurDirs();
@@ -109,6 +117,7 @@ public class CommandLineAntJobTest extends TestCase {
 		exec.destroy();
 	}
 	
+    @Test
 	public void testAntLibWithAntClassLoader() throws InterruptedException {
 		
 		OurDirs dirs = new OurDirs();
@@ -141,6 +150,7 @@ public class CommandLineAntJobTest extends TestCase {
 		exec.destroy();
 	}
 	
+    @Test
 	public void testOddjobLaunchAntLib() throws InterruptedException {
 		
 		OurDirs dirs = new OurDirs();

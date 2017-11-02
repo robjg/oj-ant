@@ -1,10 +1,15 @@
 package org.oddjob.ant;
+import static org.junit.Assert.assertEquals;
 
 import java.io.File;
 import java.io.IOException;
 
 import org.apache.log4j.Logger;
-import org.custommonkey.xmlunit.XMLTestCase;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.TestName;
 import org.oddjob.OddjobDescriptorFactory;
 import org.oddjob.arooa.ArooaDescriptor;
 import org.oddjob.arooa.ArooaParseException;
@@ -16,18 +21,23 @@ import org.oddjob.arooa.standard.StandardArooaSession;
 import org.oddjob.arooa.xml.XMLConfiguration;
 import org.oddjob.tools.OddjobTestHelper;
 import org.xml.sax.SAXException;
+import org.xmlunit.matchers.CompareMatcher;
 
-public class AntJobDesignFTest extends XMLTestCase {
+public class AntJobDesignFTest {
 
 	private static final Logger logger = Logger.getLogger(AntJobDesignFTest.class);
 	
-	public void setUp() {
-		logger.info("========================== " + getName() + "===================" );
+	@Rule public TestName name = new TestName();
+
+	@Before
+    public void setUp() {
+		logger.info("========================== " + name.getMethodName() + "===================" );
 		logger.info("stdout is " + System.out);
 	}
 
 	DesignInstance design;
 	
+    @Test
 	public void testCreate() throws ArooaParseException, SAXException, IOException {
 		
 		String xml = 
@@ -70,7 +80,7 @@ public class AntJobDesignFTest extends XMLTestCase {
 
 		String expectedTasks = "<echo message='Hello'/>";
 
-		assertXMLEqual(expectedTasks, test.getTasks());
+		Assert.assertThat(test.getTasks(), CompareMatcher.isSimilarTo(expectedTasks));
 		
 		assertEquals("URLClassLoader: " + 
 				new File("mystuff.jar").getAbsolutePath(), 

@@ -1,9 +1,13 @@
 package org.oddjob.ant;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.TestName;
 
 import java.io.File;
 import java.io.IOException;
 
-import junit.framework.TestCase;
+import org.junit.Assert;
 
 import org.apache.log4j.Logger;
 import org.oddjob.Oddjob;
@@ -13,18 +17,22 @@ import org.oddjob.arooa.reflect.ArooaPropertyException;
 import org.oddjob.arooa.standard.StandardArooaSession;
 import org.oddjob.io.BufferType;
 
-public class AntFileTest extends TestCase {
+public class AntFileTest extends Assert {
 
 	private static final Logger logger = Logger.getLogger(AntFileTest.class);
 
-	protected void setUp() throws Exception {
-		logger.info("-----------------------  " + getName() + 
+	@Rule public TestName name = new TestName();
+
+	@Before
+    public void setUp() throws Exception {
+		logger.info("-----------------------  " + name.getMethodName() + 
 				"  ---------------------");
 		logger.info("stdout is " + System.out);
 	}
 	
 	String EOL = System.getProperty("line.separator");
 	
+    @Test
 	public void testAntFile() throws IOException {
 		
 		File antFile = new File(
@@ -55,6 +63,7 @@ public class AntFileTest extends TestCase {
 		assertEquals(expected, result);
 	}
 	
+    @Test
 	public void testOddjobAntWithAntTaskInheritsProperties() throws ArooaPropertyException, ArooaConversionException {
 		
 		File file = new File(

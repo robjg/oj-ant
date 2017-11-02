@@ -1,6 +1,9 @@
 package org.oddjob.ant;
-
-import junit.framework.TestCase;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.TestName;
+import org.junit.Assert;
 
 import org.apache.log4j.Logger;
 import org.apache.tools.ant.BuildEvent;
@@ -10,12 +13,15 @@ import org.apache.tools.ant.Target;
 import org.apache.tools.ant.Task;
 import org.apache.tools.ant.UnknownElement;
 
-public class AntParserTest extends TestCase {
+public class AntParserTest extends Assert {
 
 	private static final Logger logger = Logger.getLogger(AntParserTest.class);
 
-	protected void setUp() throws Exception {
-		logger.info("-----------------------  " + getName() + 
+	@Rule public TestName name = new TestName();
+	
+    @Before
+    public void setUp() throws Exception {
+		logger.info("-----------------------  " + name.getMethodName() + 
 				"  ---------------------");
 		logger.info("stdout is " + System.out);
 	}
@@ -41,6 +47,7 @@ public class AntParserTest extends TestCase {
 	}
 	
 	
+    @Test
 	public void testParseTask() throws Exception {
 		MyBuildListener listener = new MyBuildListener();
 		
@@ -65,6 +72,7 @@ public class AntParserTest extends TestCase {
 		assertEquals("Hello World", listener.message);
 	}
 	
+    @Test
 	public void testPropertyAndTask() throws Exception {
 		MyBuildListener listener = new MyBuildListener();
 		
@@ -90,6 +98,7 @@ public class AntParserTest extends TestCase {
 		assertEquals("Apples", listener.message);
 	}
 	
+    @Test
 	public void testSharedProject() throws Exception {
 		MyBuildListener listener = new MyBuildListener();
 		
@@ -138,6 +147,7 @@ public class AntParserTest extends TestCase {
 		}
 	}
 	
+    @Test
 	public void testTaskDef() throws Exception {
 		
 		String xml = 

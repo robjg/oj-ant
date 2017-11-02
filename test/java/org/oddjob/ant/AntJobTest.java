@@ -2,6 +2,10 @@
  * (c) Rob Gordon 2005.
  */
 package org.oddjob.ant;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.TestName;
 
 import java.io.File;
 import java.io.IOException;
@@ -9,7 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-import junit.framework.TestCase;
+import org.junit.Assert;
 
 import org.apache.log4j.Logger;
 import org.apache.tools.ant.BuildException;
@@ -36,17 +40,19 @@ import org.oddjob.util.ClassLoaderDiagnostics;
 /**
  * Tests for AntJob.
  */
-public class AntJobTest extends TestCase {
+public class AntJobTest extends Assert {
 
 	private static final Logger logger = Logger.getLogger(AntJobTest.class);
 	
 	static final String LS = System.getProperty("line.separator");
 	
-	@Override
-	protected void setUp() throws Exception {
-		super.setUp();
+	@Rule public TestName name = new TestName();
+
+    @Before
+    public void setUp() throws Exception {
+
 		
-		logger.info("------------------  " + getName() + "-----------------");
+		logger.info("------------------  " + name.getMethodName() + "-----------------");
 		logger.info("stdout is " + System.out);
 		
 		results = new HashMap<String, Object>();
@@ -67,6 +73,7 @@ public class AntJobTest extends TestCase {
 		}
 	}
 	
+    @Test
 	public void testJob() throws ArooaConversionException {
 				
 		Oddjob oddjob = new Oddjob();
@@ -93,6 +100,7 @@ public class AntJobTest extends TestCase {
 		oddjob.destroy();
 	}
 
+    @Test
 	public void testSettingPropertiesInAnt() throws ArooaParseException {
 		
 		FragmentHelper helper = new FragmentHelper();
@@ -133,6 +141,7 @@ public class AntJobTest extends TestCase {
 		}
 	}
 		
+    @Test
 	public void testUsingOddjobProperty() {
 		
 		Oddjob oddjob = new Oddjob();
@@ -154,6 +163,7 @@ public class AntJobTest extends TestCase {
 		}
 	}
 	
+    @Test
 	public void testException() throws ArooaConversionException {
 		
 		String config = 
@@ -194,6 +204,7 @@ public class AntJobTest extends TestCase {
 		assertEquals("Ahhhhh!", l.em);
 	}
 	
+    @Test
 	public void testSharedProject() {
 		
 		Oddjob oj = new Oddjob();
@@ -209,6 +220,7 @@ public class AntJobTest extends TestCase {
 		
 	}
 	
+    @Test
 	public void testChangingProperty() {
 		String config = 
 			"<oddjob>" +
@@ -283,6 +295,7 @@ public class AntJobTest extends TestCase {
 	 * 
 	 * @throws Exception
 	 */
+    @Test
 	public void testClassPath() throws Exception {
 
 		OurDirs dirs = new OurDirs();
@@ -326,6 +339,7 @@ public class AntJobTest extends TestCase {
 	}
 	
 	
+    @Test
 	public void testBaseDir() {
 		
 		String config = 
@@ -354,6 +368,7 @@ public class AntJobTest extends TestCase {
 		assertEquals(new Boolean(true), results.get("basedirtest"));
 	}
 
+    @Test
 	public void testSerialize() throws IOException, ClassNotFoundException {
 	
 		StandardArooaSession session = new StandardArooaSession();
@@ -387,6 +402,7 @@ public class AntJobTest extends TestCase {
 		}
 	}
 	
+    @Test
 	public void testStop() throws InterruptedException, FailedToStopException {
 		String config = 
 			"<oddjob>" +
@@ -419,6 +435,7 @@ public class AntJobTest extends TestCase {
 		assertEquals(ParentState.INCOMPLETE, oj.lastStateEvent().getState());	
 	}
 	
+    @Test
 	public void testReset() {
 	
 		
@@ -436,6 +453,7 @@ public class AntJobTest extends TestCase {
 		assertNull(test.getProject());
 	}
 	
+    @Test
 	public void testWorkingWithFileExample() {
 
 		OurDirs dirs = new OurDirs();

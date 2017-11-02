@@ -1,21 +1,28 @@
 package org.oddjob.ant;
-
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.TestName;
 import org.apache.log4j.Logger;
 import org.apache.tools.ant.Project;
 import org.oddjob.tools.OurDirs;
 
-import junit.framework.TestCase;
+import org.junit.Assert;
 
-public class OddjobTaskTest extends TestCase {
+public class OddjobTaskTest extends Assert {
 
 	private static final Logger logger = Logger.getLogger(OddjobTaskTest.class);
 
-	protected void setUp() throws Exception {
-		logger.info("-----------------------  " + getName() + 
+	@Rule public TestName name = new TestName();
+
+	@Before
+    public void setUp() throws Exception {
+		logger.info("-----------------------  " + name.getMethodName() + 
 				"  ---------------------");
 		logger.info("stdout is " + System.out);
 	}
 	
+    @Test
 	public void testRunSimpleOddjob() {
 		
 		OurDirs dirs = new OurDirs();
