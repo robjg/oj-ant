@@ -11,7 +11,8 @@ import java.io.IOException;
 
 import org.junit.Assert;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.oddjob.Oddjob;
 import org.oddjob.OddjobLookup;
 import org.oddjob.arooa.ArooaDescriptor;
@@ -35,7 +36,7 @@ import org.oddjob.util.URLClassLoaderType;
 
 public class OddballClassLoaderTest extends Assert {
 
-	private static final Logger logger = Logger.getLogger(
+	private static final Logger logger = LoggerFactory.getLogger(
 			OddballClassLoaderTest.class);
 	
 	@Rule public TestName name = new TestName();
@@ -161,8 +162,6 @@ public class OddballClassLoaderTest extends Assert {
 		}
 	}
 	
-	String EOL = System.getProperty("line.separator");
-	
     @Test
 	public void testClassLoaderOfSubProject() 
 	throws ClassNotFoundException, IOException, ArooaPropertyException, ArooaConversionException {
@@ -242,7 +241,7 @@ public class OddballClassLoaderTest extends Assert {
 		
 		assertEquals(1, lines.length);
 		
-		assertEquals(classLoader.toString() + EOL, lines[0]);
+		assertEquals(classLoader.toString(), lines[0]);
 	}
 
 

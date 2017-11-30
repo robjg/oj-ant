@@ -1,6 +1,7 @@
 package org.oddjob.ant;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.PropertyHelper;
 import org.oddjob.arooa.ArooaSession;
@@ -14,7 +15,7 @@ import org.oddjob.arooa.runtime.Evaluator;
  * @author rob
  */
 public class OJPropertyHelper implements PropertyHelper.PropertyEvaluator {
-	private static final Logger logger = Logger.getLogger(OJPropertyHelper.class);
+	private static final Logger logger = LoggerFactory.getLogger(OJPropertyHelper.class);
 	
 	private final ArooaSession session;
 	

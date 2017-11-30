@@ -5,7 +5,8 @@ import org.junit.Test;
 import org.junit.rules.TestName;
 import org.junit.Assert;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.tools.ant.BuildEvent;
 import org.apache.tools.ant.BuildListener;
 import org.apache.tools.ant.DefaultLogger;
@@ -27,7 +28,7 @@ import org.oddjob.values.types.PropertyType;
 
 public class OJPropertyHelperTest extends Assert {
 
-	private static final Logger logger = Logger.getLogger(AntFileTest.class);
+	private static final Logger logger = LoggerFactory.getLogger(AntFileTest.class);
 
 	@Rule public TestName name = new TestName();
 	

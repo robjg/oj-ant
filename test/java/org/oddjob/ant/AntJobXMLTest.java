@@ -1,5 +1,6 @@
 package org.oddjob.ant;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
@@ -12,7 +13,7 @@ import org.xmlunit.matchers.CompareMatcher;
 
 public class AntJobXMLTest {
 
-	private static final Logger logger = Logger.getLogger(
+	private static final Logger logger = LoggerFactory.getLogger(
 			AntJobXMLTest.class);
 	
 	@Rule public TestName name = new TestName();

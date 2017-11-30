@@ -9,7 +9,8 @@ import java.io.IOException;
 
 import org.junit.Assert;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.oddjob.Oddjob;
 import org.oddjob.OddjobLookup;
 import org.oddjob.arooa.convert.ArooaConversionException;
@@ -19,7 +20,7 @@ import org.oddjob.io.BufferType;
 
 public class AntFileTest extends Assert {
 
-	private static final Logger logger = Logger.getLogger(AntFileTest.class);
+	private static final Logger logger = LoggerFactory.getLogger(AntFileTest.class);
 
 	@Rule public TestName name = new TestName();
 

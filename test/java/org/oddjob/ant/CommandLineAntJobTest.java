@@ -9,7 +9,8 @@ import java.io.IOException;
 
 import org.junit.Assert;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.oddjob.jobs.ExecJob;
 import org.oddjob.tools.ConsoleCapture;
 import org.oddjob.tools.OddjobSrc;
@@ -17,7 +18,7 @@ import org.oddjob.tools.OurDirs;
 
 public class CommandLineAntJobTest extends Assert {
 	
-	private static final Logger logger = Logger.getLogger(
+	private static final Logger logger = LoggerFactory.getLogger(
 			CommandLineAntJobTest.class);
 	
 	final static String RUN_JAR = "run-oddjob.jar";

@@ -15,7 +15,8 @@ import java.util.Properties;
 
 import org.junit.Assert;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 import org.oddjob.FailedToStopException;
@@ -42,7 +43,7 @@ import org.oddjob.util.ClassLoaderDiagnostics;
  */
 public class AntJobTest extends Assert {
 
-	private static final Logger logger = Logger.getLogger(AntJobTest.class);
+	private static final Logger logger = LoggerFactory.getLogger(AntJobTest.class);
 	
 	static final String LS = System.getProperty("line.separator");
 	

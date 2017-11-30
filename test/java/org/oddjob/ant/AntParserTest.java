@@ -5,7 +5,8 @@ import org.junit.Test;
 import org.junit.rules.TestName;
 import org.junit.Assert;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.tools.ant.BuildEvent;
 import org.apache.tools.ant.BuildListener;
 import org.apache.tools.ant.Project;
@@ -15,7 +16,7 @@ import org.apache.tools.ant.UnknownElement;
 
 public class AntParserTest extends Assert {
 
-	private static final Logger logger = Logger.getLogger(AntParserTest.class);
+	private static final Logger logger = LoggerFactory.getLogger(AntParserTest.class);
 
 	@Rule public TestName name = new TestName();
 	

@@ -3,7 +3,8 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestName;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.tools.ant.Project;
 import org.oddjob.tools.OurDirs;
 
@@ -11,7 +12,7 @@ import org.junit.Assert;
 
 public class OddjobTaskTest extends Assert {
 
-	private static final Logger logger = Logger.getLogger(OddjobTaskTest.class);
+	private static final Logger logger = LoggerFactory.getLogger(OddjobTaskTest.class);
 
 	@Rule public TestName name = new TestName();
 

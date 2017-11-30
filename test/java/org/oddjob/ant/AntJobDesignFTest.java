@@ -4,7 +4,8 @@ import static org.junit.Assert.assertEquals;
 import java.io.File;
 import java.io.IOException;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
@@ -25,7 +26,7 @@ import org.xmlunit.matchers.CompareMatcher;
 
 public class AntJobDesignFTest {
 
-	private static final Logger logger = Logger.getLogger(AntJobDesignFTest.class);
+	private static final Logger logger = LoggerFactory.getLogger(AntJobDesignFTest.class);
 	
 	@Rule public TestName name = new TestName();
 
