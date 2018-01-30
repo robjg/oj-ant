@@ -2,8 +2,6 @@ package org.oddjob.ant;
 
 
 import java.io.File;
-import java.io.IOException;
-import java.text.ParseException;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Properties;
@@ -97,14 +95,16 @@ public class OddjobTask extends Task {
 		oddjobBuilder.setOddballsPath(oddballsPath);
 		
 		try {
-			Oddjob oddjob = oddjobBuilder.buildOddjob();
-			
+			Oddjob oddjob = oddjobBuilder.buildOddjob()
+					.orElseThrow();
+
 			if (args != null) {
 				oddjob.setArgs(new QuoteTokenizerFactory(
 						"\\s+", '"', '\\').newTokenizer().parse(args));
 			}
 			
 			oddjob.setProperties(properties);
+			
 			
 			log("Running Oddjob [" + oddjob.toString() + "], configuration " +
 					file.getCanonicalPath());
@@ -114,9 +114,7 @@ public class OddjobTask extends Task {
 			log("Ran Oddjob [" + oddjob.toString() + "], state " + 
 					oddjob.lastStateEvent().getState());
 		} 
-		catch (IOException e) {
-		}
-		catch (ParseException e) {
+		catch (Exception e) {
 			throw new BuildException(e);
 		}		
 	}

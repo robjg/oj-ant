@@ -63,7 +63,8 @@ public class CommandLineAntJobTest extends Assert {
 		
 		ExecJob exec = new ExecJob();
 		exec.setCommand("java -jar " + relative(RUN_JAR) + 
-				" -nb -op " + antOddball + " -f " + oddjobFile);
+				" -nb -op " + antOddball + " -f " + oddjobFile
+				+ " -l " + relative("test/launch/logback.xml"));
 		
 		ConsoleCapture console = new ConsoleCapture();
 		try (ConsoleCapture.Close close = console.capture(exec.consoleLog())) {
@@ -97,7 +98,8 @@ public class CommandLineAntJobTest extends Assert {
 		
 		ExecJob exec = new ExecJob();
 		exec.setCommand("java -jar " + relative(RUN_JAR) + 
-				" -nb -op " + antOddball + " -f " + oddjobFile);
+				" -nb -op " + antOddball + " -f " + oddjobFile
+				+ " -l " + relative("test/launch/logback.xml"));
 		
 		ConsoleCapture console = new ConsoleCapture();
 		try (ConsoleCapture.Close close = console.capture(exec.consoleLog())) {
@@ -131,7 +133,8 @@ public class CommandLineAntJobTest extends Assert {
 		
 		ExecJob exec = new ExecJob();
 		exec.setCommand("java -jar " + relative(RUN_JAR) + 
-				" -nb -op " + antOddball + " -f " + oddjobFile);
+				" -nb -op " + antOddball + " -f " + oddjobFile
+				+ " -l " + relative("test/launch/logback.xml"));
 		
 		ConsoleCapture console = new ConsoleCapture();
 		try (ConsoleCapture.Close close = console.capture(exec.consoleLog())) {
@@ -164,7 +167,8 @@ public class CommandLineAntJobTest extends Assert {
 		
 		ExecJob exec = new ExecJob();
 		exec.setCommand("java -jar " + relative(RUN_JAR) + 
-				" -nb -op " + antOddball + " -f " + oddjobFile);
+				" -nb -op " + antOddball + " -f " + oddjobFile
+				+ " -l " + relative("test/launch/logback.xml"));
 		
 		ConsoleCapture console = new ConsoleCapture();
 		try (ConsoleCapture.Close close = console.capture(exec.consoleLog())) {

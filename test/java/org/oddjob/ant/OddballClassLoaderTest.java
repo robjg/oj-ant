@@ -92,6 +92,8 @@ public class OddballClassLoaderTest extends Assert {
 	public void testClassLoaderOfTasksCreated() 
 	throws Exception {
 		
+		OurDirs base = new OurDirs();
+
 		ClassLoader existing = Thread.currentThread().getContextClassLoader();
 		
 		Thread.currentThread().setContextClassLoader(null);
@@ -110,7 +112,7 @@ public class OddballClassLoaderTest extends Assert {
 			// needed for log4j to ensure we don't pick up a test version
 			// because System.out will already be capturing log messages from
 			// previous tests - we don't want these in our console capture.
-			all[1] = new File(oddjobHome.oddjobSrcBase() + "/opt/classes");
+			all[1] = base.relative("test/launch");
 			System.arraycopy(files, 0, all, 2, files.length);
 			
 			URLClassLoaderType loaderType = new URLClassLoaderType();
@@ -120,8 +122,6 @@ public class OddballClassLoaderTest extends Assert {
 			
 			ClassLoader loader = loaderType.toValue();
 			
-			OurDirs base = new OurDirs();
-	
 			Class<?> ojClass = loader.loadClass(
 					Oddjob.class.getName());
 			
