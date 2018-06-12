@@ -25,7 +25,7 @@ import org.oddjob.Stoppable;
 import org.oddjob.arooa.deploy.annotations.ArooaAttribute;
 import org.oddjob.arooa.deploy.annotations.ArooaElement;
 import org.oddjob.arooa.runtime.PropertyLookup;
-import org.oddjob.framework.SerializableJob;
+import org.oddjob.framework.extend.SerializableJob;
 import org.oddjob.io.Files;
 import org.oddjob.launch.Locator;
 import org.oddjob.util.ClassLoaderDiagnostics;
