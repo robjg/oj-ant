@@ -1,0 +1,11 @@
+<ant>
+    <tasks>
+        <xml>
+            <tasks>
+                <property name="test.thing" value="Test"/>
+                <echo message='${test.thing}'/>
+            </tasks>
+        </xml>
+    </tasks>
+</ant>
+ 

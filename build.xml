@@ -41,9 +41,9 @@
 		<!-- <property name="build.compiler" value="classic"/> -->
 
 		<property name="src.dir"      value="./src"/>
-		<property name="java.dir"     value="${src.dir}/java"/>
+		<property name="java.dir"     value="src/main/java"/>
 		<property name="test.dir"     value="./test"/>
-		<property name="test.src"     value="${test.dir}/java"/>
+		<property name="test.src"     value="src/test/java"/>
 		<property name="work.dir"     value="./work"/>
 		<property name="lib.dir"      value="./lib"/>
 
@@ -114,14 +114,14 @@
 		<mkdir dir="${build.src}"/>
 		<mkdir dir="${build.classes}"/>
 		<copy todir="${build.src}" filtering="on">
-			<fileset dir="${java.dir}">
+			<fileset dir="src/main/java">
 				<exclude name="**/*.gif"/>
 				<exclude name="**/*.properties"/>
 				<exclude name="**/*.xml"/>
 			</fileset>
 		</copy>
 		<copy todir="${build.src}" filtering="off">
-			<fileset dir="${java.dir}">
+			<fileset dir="src/main/java">
 				<include name="**/*.gif"/>
 				<include name="**/*.properties"/>
 				<include name="**/*.xml"/>

@@ -5,18 +5,18 @@
             <jobs>
                 <variables id="vars">
                     <ojAntHome>
-                        <file file="${this.dir}/../.."/>
+                        <file file="${this.dir}/../../target/oddball"/>
                     </ojAntHome>
                     <classPath>
                         <files>
                             <list>
-                                <files files="${vars.ojAntHome}/classes"/>
                                 <files files="${vars.ojAntHome}/lib/*.jar"/>
                                 <file file="${this.dir}/../ant"/>
                             </list>
                         </files>
                     </classPath>
                 </variables>
+                <echo>${vars.classpath}</echo>
                 <launch className="org.oddjob.ant.AntMainOverride">
                     <args>
                         <list>

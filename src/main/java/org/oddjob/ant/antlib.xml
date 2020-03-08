@@ -1,0 +1,4 @@
+<antlib>
+  <taskdef name="oddjob"
+       classname="org.oddjob.ant.OddjobTask"/>
+</antlib>

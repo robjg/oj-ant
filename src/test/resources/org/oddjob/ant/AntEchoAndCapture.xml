@@ -1,0 +1,20 @@
+<oddjob id='this'>
+    <job>
+        <ant id='an-ant'>
+            <output>
+                <identify id='result'>
+                    <value>
+                        <buffer/>
+                    </value>
+                </identify>
+            </output>
+            <tasks>
+                <xml>
+                    <tasks>
+                        <echo message='${this.args[0]}'/>
+                    </tasks>
+                </xml>
+            </tasks>
+        </ant>
+    </job>
+</oddjob>

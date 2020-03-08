@@ -1,7 +1,0 @@
-<arooa:descriptor  xmlns:arooa="http://rgordon.co.uk/oddjob/arooa">
-	<components>
-		<is element='ant' 
-			className='org.oddjob.ant.AntJob'
-			designFactory='org.oddjob.ant.AntJobDesignF' />
-	</components>
-</arooa:descriptor>
