@@ -10,8 +10,11 @@
 	<dependencies>
 	
 	    <dependency org="uk.co.rgordon" name="oddjob" rev="latest.integration"
-	    	conf="provided->default,launch" />
+	    	conf="provided->default" />
 	    	
+	    <dependency org="uk.co.rgordon" name="run-oddjob" rev="latest.integration"
+	    	conf="provided->default" />
+
 		<dependency org="org.apache.ant" name="ant-launcher" rev="${really.ant.version}"
 			conf="default->default" />
 

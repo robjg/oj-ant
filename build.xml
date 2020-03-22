@@ -24,7 +24,8 @@
 
 		<property name="oddjob.src"          value="../oddjob"/>
 		<property name="oddjob.home"          value="../oddjob"/>
-		
+		<property name="oddjob.app"          value="../run-oddjob/target/oddjob"/>
+
 		<echo message="--------------------------------------------------------------"/>
 		<echo message="            ${Name} ${build.version}                                "/>
 		<echo message="--------------------------------------------------------------"/>
@@ -48,7 +49,7 @@
 		<property name="lib.dir"      value="./lib"/>
 
 
-		<property name="build.dir"       	value="./build"/>
+		<property name="build.dir"       	value="./build/oddball"/>
 		<property name="build.src"       	value="${build.dir}/src"/>
 		<property name="build.classes"   	value="${build.dir}/classes"/>
 		<property name="build.test"      	value="${build.dir}/test"/>
@@ -323,16 +324,6 @@
 		
 	<target name="clean" depends="init" description="Cleans the build directories">
 		<delete dir="${build.dir}"/>
-		<delete>
-			<fileset dir="${lib.dir}">
-				 <include name="*.jar"/>
-			</fileset>
-		</delete>
-		<delete>
-			<fileset dir="${test.dir}/ant">
-				 <include name="**.class"/>
-			</fileset>
-		</delete>
 	</target>
 
 </project>
