@@ -4,15 +4,16 @@
 	<configurations>
         <conf name="default" visibility="public"></conf>
         <conf name="provided" visibility="public"></conf>
+		<conf name="optional" visibility="public"></conf>
         <conf name="test" extends="default,provided" visibility="public"></conf>
 	</configurations>  
         
 	<dependencies>
 	
-	    <dependency org="uk.co.rgordon" name="oddjob" rev="latest.integration"
+	    <dependency org="uk.co.rgordon" name="oddjob" rev="${project.version}"
 	    	conf="provided->default" />
 	    	
-	    <dependency org="uk.co.rgordon" name="run-oddjob" rev="latest.integration"
+	    <dependency org="uk.co.rgordon" name="run-oddjob" rev="${project.version}"
 	    	conf="provided->default" />
 
 		<dependency org="org.apache.ant" name="ant-launcher" rev="${really.ant.version}"
@@ -21,9 +22,24 @@
 		<dependency org="org.apache.ant" name="ant" rev="${really.ant.version}"
 			conf="default->default" />
 
-	    <dependency org="uk.co.rgordon" name="arooa" rev="latest.integration"
+		<dependency org="org.apache.ant" name="ant-junit" rev="${really.ant.version}"
+					conf="optional->default" />
+
+		<dependency org="org.apache.ant" name="ant-junit4" rev="${really.ant.version}"
+					conf="optional->default" />
+
+		<dependency org="org.apache.ant" name="ant-junitlauncher" rev="${really.ant.version}"
+					conf="optional->default" />
+
+		<dependency org="org.junit.jupiter" name="junit-jupiter" rev="${junit5.version}"
+					conf="test->default"/>
+
+		<dependency org="org.junit.vintage" name="junit-vintage-engine" rev="${junit5.version}"
+					conf="test->default"/>
+
+		<dependency org="uk.co.rgordon" name="arooa" rev="${project.version}"
 	    	conf="test->test" />
-	    	
+
 	</dependencies>
   
 </ivy-module>
