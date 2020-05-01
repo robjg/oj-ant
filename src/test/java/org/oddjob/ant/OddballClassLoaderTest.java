@@ -1,15 +1,10 @@
 package org.oddjob.ant;
+
 import org.junit.jupiter.api.*;
-
-import java.io.File;
-import java.io.IOException;
-
-import org.junit.Assert;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.oddjob.Oddjob;
 import org.oddjob.OddjobLookup;
+import org.oddjob.OddjobSrc;
+import org.oddjob.OurDirs;
 import org.oddjob.arooa.ArooaDescriptor;
 import org.oddjob.arooa.ArooaType;
 import org.oddjob.arooa.beanutils.BeanUtilsPropertyAccessor;
@@ -25,12 +20,18 @@ import org.oddjob.oddballs.Oddball;
 import org.oddjob.oddballs.OddballsDescriptorFactory;
 import org.oddjob.state.ParentState;
 import org.oddjob.tools.ConsoleCapture;
-import org.oddjob.OddjobSrc;
-import org.oddjob.OurDirs;
 import org.oddjob.util.URLClassLoaderType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 @Tag("IntegrationTest")
-public class OddballClassLoaderTest extends Assert {
+public class OddballClassLoaderTest {
 
 	private static final Logger logger = LoggerFactory.getLogger(
 			OddballClassLoaderTest.class);
@@ -49,18 +50,19 @@ public class OddballClassLoaderTest extends Assert {
 	}
 	
     @Test
-	void testLoadOddball() throws ClassNotFoundException, IOException {
+	void testLoadOddball() throws IOException {
 		
-		File oddjobApp = new OddjobSrc().oddjobApp();
+		Path oddjobApp = OddjobSrc.oddjobApp();
 
 		FilesType oddjobLib = new FilesType();
-		oddjobLib.setFiles(oddjobApp + "/lib/*.jar");
+		oddjobLib.setFiles(oddjobApp.toString() + "/lib/*.jar");
 		
 		File[] files = oddjobLib.toFiles();
 		assertTrue(files.length > 0);
 		
 		File[] all = new File[files.length + 1];
-		all[0] = new File(oddjobApp + "/run-oddjob.jar");
+		all[0] = OddjobSrc.appJar().toFile();
+
 		System.arraycopy(files, 0, all, 1, files.length);
 		
 		URLClassLoaderType loaderType = new URLClassLoaderType();
@@ -68,10 +70,11 @@ public class OddballClassLoaderTest extends Assert {
 		loaderType.setParent(getClass().getClassLoader());
 		loaderType.configured();
 
-		File oddballDir = new OurDirs().relative("target/oddball");
+		Path oddballDir = OurDirs.buildDirPath()
+				.resolve("oddball");
 
 		Oddball oddball = new DirectoryOddball().createFrom(
-				oddballDir, loaderType.toValue());
+				oddballDir.toFile(), loaderType.toValue());
 	
 		ArooaDescriptor descriptor = oddball.getArooaDescriptor();
 		
@@ -94,7 +97,7 @@ public class OddballClassLoaderTest extends Assert {
 		Thread.currentThread().setContextClassLoader(null);
 		
 		try {
-			File oddjobApp = new OddjobSrc().oddjobApp();
+			Path oddjobApp = OddjobSrc.oddjobApp();
 			
 			FilesType oddjobLib = new FilesType();
 			oddjobLib.setFiles(oddjobApp + "/lib/*.jar");
@@ -103,7 +106,7 @@ public class OddballClassLoaderTest extends Assert {
 			assertTrue(files.length > 0);
 			
 			File[] all = new File[files.length + 2];
-			all[0] = new File(oddjobApp + "/run-oddjob.jar");
+			all[0] = OddjobSrc.appJar().toFile();
 			// needed for log4j to ensure we don't pick up a test version
 			// because System.out will already be capturing log messages from
 			// previous tests - we don't want these in our console capture.
@@ -138,7 +141,7 @@ public class OddballClassLoaderTest extends Assert {
 					base.relative("test/files/classloader-test.xml"));
 			
 			ConsoleCapture console = new ConsoleCapture();
-			try (ConsoleCapture.Close close = console.captureConsole()) {
+			try (ConsoleCapture.Close ignored = console.captureConsole()) {
 				
 				oddjob.run();		
 			}
@@ -161,11 +164,11 @@ public class OddballClassLoaderTest extends Assert {
 	
     @Test
 	public void testClassLoaderOfSubProject() 
-	throws ClassNotFoundException, IOException, ArooaPropertyException, ArooaConversionException {
-		
+	throws IOException, ArooaPropertyException, ArooaConversionException {
+
 		OurDirs base = new OurDirs();
 
-		File oddjobApp = new OddjobSrc().oddjobApp();
+		Path oddjobApp = OddjobSrc.oddjobApp();
 
 		FilesType oddjobLib = new FilesType();
 		oddjobLib.setFiles(oddjobApp + "/lib/*.jar");
@@ -181,11 +184,11 @@ public class OddballClassLoaderTest extends Assert {
 		Oddjob oddjob = new Oddjob();
 		oddjob.setClassLoader(loaderType.toValue());
 
-		File oddballDir = base.relative("target/oddball");
+		Path oddballDir = OurDirs.buildDirPath().resolve("oddball");
 
 		OddballsDescriptorFactory oddball = 
 			new OddballsDescriptorFactory();
-		oddball.setFiles(new File[] { oddballDir });
+		oddball.setFiles(new File[] { oddballDir.toFile() });
 		oddjob.setDescriptorFactory(oddball);
 
 		String xml = 
@@ -215,7 +218,7 @@ public class OddballClassLoaderTest extends Assert {
 		oddjob.setConfiguration(new XMLConfiguration("XML", xml));
 		
 		ConsoleCapture console = new ConsoleCapture();
-		try (ConsoleCapture.Close close = console.captureConsole()) {
+		try (ConsoleCapture.Close ignored = console.captureConsole()) {
 			
 			oddjob.run();
 		}
