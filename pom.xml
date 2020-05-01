@@ -174,7 +174,7 @@
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <configuration>
                     <skipTests>${skip.integration.tests}</skipTests>
-                    <groups>IntegrationTest</groups>
+                    <groups>${integration.test.tag}</groups>
                     <includes>
                         <include>**/*Test.java</include>
                     </includes>
