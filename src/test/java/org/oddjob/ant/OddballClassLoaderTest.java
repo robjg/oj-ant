@@ -122,11 +122,12 @@ public class OddballClassLoaderTest {
 			
 			Class<?> ojClass = loader.loadClass(
 					Oddjob.class.getName());
-			
-			Runnable oddjob = (Runnable) ojClass.newInstance();
+
+			Runnable oddjob = (Runnable) ojClass.getConstructor().newInstance();
 	
 			Object oddball = loader.loadClass(
-					OddballsDescriptorFactory.class.getName()).newInstance(); 
+					OddballsDescriptorFactory.class.getName())
+					.getConstructor().newInstance();
 			
 			BeanUtilsPropertyAccessor accessor = 
 				new BeanUtilsPropertyAccessor();

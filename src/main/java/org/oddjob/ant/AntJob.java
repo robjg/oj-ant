@@ -1,26 +1,7 @@
 package org.oddjob.ant;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
-import java.io.PrintStream;
-import java.io.StringReader;
-import java.util.HashMap;
-import java.util.Map;
-
-import org.apache.tools.ant.BuildEvent;
-import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.BuildListener;
-import org.apache.tools.ant.BuildLogger;
-import org.apache.tools.ant.DefaultLogger;
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.PropertyHelper;
-import org.apache.tools.ant.Target;
+import org.apache.tools.ant.*;
 import org.apache.tools.ant.types.Path;
-import org.apache.tools.ant.util.StringUtils;
 import org.oddjob.Stoppable;
 import org.oddjob.arooa.deploy.annotations.ArooaAttribute;
 import org.oddjob.arooa.deploy.annotations.ArooaElement;
@@ -32,6 +13,10 @@ import org.oddjob.util.ClassLoaderDiagnostics;
 import org.oddjob.util.OddjobConfigException;
 import org.oddjob.util.URLClassLoaderType;
 
+import java.io.*;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @oddjob.description Run a series of <a href="http://ant.apache.org">Ant</a>
  * tasks. 
@@ -40,9 +25,9 @@ import org.oddjob.util.URLClassLoaderType;
  * <em>Not all tasks have been tested!</em>
  * 
  * <h3>The Ant Project</h3>
- * Oddjob creates it's own Ant project to use internally this project can be
+ * Oddjob creates its own Ant project to use internally this project can be
  * shared between different AntJob jobs using the 'project' attribute. This
- * allows taskdefs and properties to be defined in one place and shared
+ * allows {@code taskdef}s and properties to be defined in one place and shared
  * in many jobs.
  * 
  * <h3>Property Expansion</h3>
@@ -61,9 +46,9 @@ import org.oddjob.util.URLClassLoaderType;
  * <h3>ClassLoaders and Task Definitions</h3>
  * <p>
  * A class path or class loader can be supplied and this will be used for
- * task definitions and antlibs. Name space antlibs will only work if
+ * task definitions and {@code antlibs}. Name space antlibs will only work if
  * the antlib is placed in the oj-ant/lib directory. This is
- * becuase name space ant libs require the ant lib to be loaded in the same 
+ * because name space ant libs require the ant lib to be loaded in the same
  * class loader as Ant.
  * 
  * 
@@ -111,15 +96,15 @@ public class AntJob extends SerializableJob
 implements Stoppable {
     static final long serialVersionUID = 2009042400L;
 
-    private static Map<String, Integer> messageLevels = 
-    	new HashMap<String, Integer>();
+    private static final Map<String, Integer> messageLevels =
+			new HashMap<>();
     
     static {
-    	messageLevels.put("DEBUG", new Integer(Project.MSG_DEBUG));
-    	messageLevels.put("ERR", new Integer(Project.MSG_ERR));
-    	messageLevels.put("INFO", new Integer(Project.MSG_INFO));
-    	messageLevels.put("VERBOSE", new Integer(Project.MSG_VERBOSE));
-    	messageLevels.put("WARN", new Integer(Project.MSG_WARN));
+    	messageLevels.put("DEBUG", Project.MSG_DEBUG);
+    	messageLevels.put("ERR", Project.MSG_ERR);
+    	messageLevels.put("INFO", Project.MSG_INFO);
+    	messageLevels.put("VERBOSE", Project.MSG_VERBOSE);
+    	messageLevels.put("WARN", Project.MSG_WARN);
     }
     
 	/** 
@@ -248,7 +233,7 @@ implements Stoppable {
 		if (messageLevel == null) {
 			return Project.MSG_INFO;
 		}
-		return ((Integer)messageLevels.get(messageLevel)).intValue();
+		return messageLevels.get(messageLevel);
 	}
 	
 	/**
@@ -317,7 +302,7 @@ implements Stoppable {
 			debug.setMessageOutputLevel(messageLevel());
 			project.addBuildListener(debug);
 			
-			Target target = (Target) project.getTargets().get(
+			Target target = project.getTargets().get(
 					AntParser.TARGET_NAME);
 
 			executionThread = Thread.currentThread();
@@ -398,7 +383,7 @@ implements Stoppable {
 	    protected int msgOutputLevel = Project.MSG_ERR;
 
 	    /** Line separator */
-	    protected final String lSep = StringUtils.LINE_SEP;
+	    protected final String lSep = System.lineSeparator();
 
 	    /**
 	     * Sets the highest level of message this logger should respond to.
@@ -481,18 +466,14 @@ implements Stoppable {
 	        // Filter out messages based on priority
 	        if (priority <= msgOutputLevel) {
 
-	            StringBuffer message = new StringBuffer();
+	            StringBuilder message = new StringBuilder();
 	            if (event.getTask() != null) {
 	                // Print out the name of the task if we're in one
 	                String name = event.getTask().getTaskName();
 	                String label = "[" + name + "] ";
 	                int size = LEFT_COLUMN_SIZE - label.length();
-	                StringBuffer tmp = new StringBuffer();
-	                for (int i = 0; i < size; i++) {
-	                    tmp.append(" ");
-	                }
-	                tmp.append(label);
-	                label = tmp.toString();
+					label = " ".repeat(size) +
+							label;
 
 	                try {
 	                    BufferedReader r =
@@ -502,7 +483,7 @@ implements Stoppable {
 	                    boolean first = true;
 	                    while (line != null) {
 	                        if (!first) {
-	                            message.append(StringUtils.LINE_SEP);
+	                            message.append(lSep);
 	                        }
 	                        first = false;
 	                        message.append(label).append(line);
@@ -519,7 +500,7 @@ implements Stoppable {
 	            String msg = message.toString();
 		        logger().info(msg);
 	        }
-	        // A really bad way to try and stop the build.
+	        // A bad way to try and stop the build.
 	        if (stop) {
 	        	throw new RuntimeException("Stop Has Been Requested.");
 	        }

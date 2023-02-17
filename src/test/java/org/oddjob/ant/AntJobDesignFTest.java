@@ -1,5 +1,5 @@
 package org.oddjob.ant;
-import org.junit.Assert;
+
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -20,6 +20,7 @@ import org.xmlunit.matchers.CompareMatcher;
 
 import java.io.File;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
 
 public class AntJobDesignFTest {
@@ -79,7 +80,7 @@ public class AntJobDesignFTest {
 
 		String expectedTasks = "<echo message='Hello'/>";
 
-		Assert.assertThat(test.getTasks(), CompareMatcher.isSimilarTo(expectedTasks));
+		assertThat(test.getTasks(), CompareMatcher.isSimilarTo(expectedTasks));
 		
 		assertEquals("URLClassLoader: " + 
 				new File("mystuff.jar").getAbsolutePath(), 
