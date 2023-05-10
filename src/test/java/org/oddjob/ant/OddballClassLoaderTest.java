@@ -85,11 +85,11 @@ public class OddballClassLoaderTest {
 		
 		assertNotNull(cl);
 	}
-		
+
     @Test
 	public void testClassLoaderOfTasksCreated() 
 	throws Exception {
-		
+
 		OurDirs base = new OurDirs();
 
 		ClassLoader existing = Thread.currentThread().getContextClassLoader();
@@ -115,7 +115,7 @@ public class OddballClassLoaderTest {
 			
 			URLClassLoaderType loaderType = new URLClassLoaderType();
 			loaderType.setFiles(all);
-			loaderType.setNoInherit(true);
+			loaderType.setParent(ClassLoader.getPlatformClassLoader());
 			loaderType.configured();
 			
 			ClassLoader loader = loaderType.toValue();

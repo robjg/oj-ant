@@ -1,12 +1,6 @@
 package org.oddjob.ant;
 
 
-import java.io.File;
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.Properties;
-import java.util.Vector;
-
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
@@ -14,6 +8,12 @@ import org.apache.tools.ant.taskdefs.Property;
 import org.oddjob.Oddjob;
 import org.oddjob.OddjobBuilder;
 import org.oddjob.arooa.utils.QuoteTokenizerFactory;
+
+import java.io.File;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Properties;
+import java.util.Vector;
 
 /**
  * This is an ant task which runs Oddjob.
@@ -24,9 +24,10 @@ import org.oddjob.arooa.utils.QuoteTokenizerFactory;
  *             classname="org.oddjob.ant.OddjobTask"/&gt;
  *
  * &lt;target name="simple"
- *        description="Run somehting simple"/&gt;
+ *        description="Run Something simple"/&gt;
  *   &lt;oddjob config="simple/oddjob.xml"/&gt;
- * &lt/target&gt;
+ * &lt;/target&gt;
+ * </pre>
  *
  * @author Rob Gordon
  */
@@ -50,7 +51,7 @@ public class OddjobTask extends Task {
 	private String args;
 	
     /** the properties to pass to the new project */
-    private Vector<Property> properties = new Vector<Property>();
+    private final Vector<Property> properties = new Vector<>();
 	
 	/**
 	 * Execute the job.
@@ -73,13 +74,9 @@ public class OddjobTask extends Task {
 		
 		OddjobBuilder oddjobBuilder = new OddjobBuilder();
 		
-		String oddjobHome = null;
-		
-		if (antProperties != null) {
-				oddjobHome = (String) antProperties.get(
-						ODDJOB_HOME_PROPERTY);	
-		}
-		
+		String oddjobHome = (String) antProperties.get(
+				ODDJOB_HOME_PROPERTY);
+
 		oddjobBuilder.setOddjobHome(oddjobHome);
 		
 		File file = this.file;
@@ -106,12 +103,12 @@ public class OddjobTask extends Task {
 			oddjob.setProperties(properties);
 			
 			
-			log("Running Oddjob [" + oddjob.toString() + "], configuration " +
+			log("Running Oddjob [" + oddjob + "], configuration " +
 					file.getCanonicalPath());
 			
 			oddjob.run();
 			
-			log("Ran Oddjob [" + oddjob.toString() + "], state " + 
+			log("Ran Oddjob [" + oddjob + "], state " +
 					oddjob.lastStateEvent().getState());
 		} 
 		catch (Exception e) {
