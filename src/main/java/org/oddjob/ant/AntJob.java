@@ -472,9 +472,10 @@ implements Stoppable {
 	                String name = event.getTask().getTaskName();
 	                String label = "[" + name + "] ";
 	                int size = LEFT_COLUMN_SIZE - label.length();
-					label = " ".repeat(size) +
-							label;
-
+					if (size > 0) {
+						label = " ".repeat(size) +
+								label;
+					}
 	                try {
 	                    BufferedReader r =
 	                        new BufferedReader(
