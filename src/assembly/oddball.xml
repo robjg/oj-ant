@@ -14,6 +14,17 @@
             <outputDirectory>lib</outputDirectory>
         </file>
     </files>
+    <fileSets>
+        <fileSet>
+            <directory>${project.basedir}</directory>
+            <outputDirectory>./</outputDirectory>
+            <includes>
+                <include>README.md</include>
+                <include>LICENSE.txt</include>
+                <include>NOTICE.txt</include>
+            </includes>
+        </fileSet>
+    </fileSets>
     <dependencySets>
         <dependencySet>
             <outputDirectory>lib</outputDirectory>
