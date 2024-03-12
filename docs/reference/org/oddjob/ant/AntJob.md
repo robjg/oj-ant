@@ -213,7 +213,6 @@ Running an Ant Echo Task. The resultant output is captured in a buffer.
         </ant>
     </job>
 </oddjob>
-
 ```
 
 
@@ -232,7 +231,6 @@ Defining Ant properties in an Ant Job.
         </xml>
     </tasks>
 </ant>
- 
 ```
 
 
@@ -270,8 +268,6 @@ available in the Ant tasks.
         </sequential>
     </job>
 </oddjob>
-        
-
 ```
 
 
@@ -322,7 +318,6 @@ Sharing a project.
         </sequential>
     </job>
 </oddjob>
-
 ```
 
 
@@ -368,7 +363,6 @@ Working with files in Ant.
         </sequential>
     </job>
 </oddjob>
-
 ```
 
 
