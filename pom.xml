@@ -55,7 +55,6 @@
     </profiles>
 
     <properties>
-        <ant.version>1.10.13</ant.version>
         <integration.test.tag>IntegrationTest</integration.test.tag>
     </properties>
 
