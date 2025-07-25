@@ -95,13 +95,13 @@
         <dependency>
             <groupId>uk.co.rgordon</groupId>
             <artifactId>oddjob</artifactId>
-            <scope>provided</scope>
+            <scope>compile</scope>
         </dependency>
 
         <dependency>
             <groupId>uk.co.rgordon</groupId>
             <artifactId>run-oddjob</artifactId>
-            <scope>provided</scope>
+            <scope>compile</scope>
         </dependency>
 
         <dependency>
@@ -151,7 +151,7 @@
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <scope>test</scope>
+            <scope>runtime</scope>
         </dependency>
 
     </dependencies>

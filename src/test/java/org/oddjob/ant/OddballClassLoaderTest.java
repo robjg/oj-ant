@@ -15,7 +15,7 @@ import org.oddjob.arooa.reflect.ArooaClass;
 import org.oddjob.arooa.reflect.ArooaPropertyException;
 import org.oddjob.arooa.xml.XMLConfiguration;
 import org.oddjob.io.FilesType;
-import org.oddjob.oddballs.DirectoryOddball;
+import org.oddjob.oddballs.DirectoryOddballFactory;
 import org.oddjob.oddballs.Oddball;
 import org.oddjob.oddballs.OddballsDescriptorFactory;
 import org.oddjob.state.ParentState;
@@ -50,7 +50,7 @@ public class OddballClassLoaderTest {
 	}
 	
     @Test
-	void testLoadOddball() throws IOException {
+	void testLoadOddball() throws Exception {
 		
 		Path oddjobApp = OddjobSrc.oddjobApp();
 
@@ -73,8 +73,8 @@ public class OddballClassLoaderTest {
 		Path oddballDir = OurDirs.buildDirPath()
 				.resolve("oddball");
 
-		Oddball oddball = new DirectoryOddball().createFrom(
-				oddballDir.toFile(), loaderType.toValue());
+		Oddball oddball = DirectoryOddballFactory.from(oddballDir.toFile())
+				.createFrom(loaderType.toValue());
 	
 		ArooaDescriptor descriptor = oddball.getArooaDescriptor();
 		
