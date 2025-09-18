@@ -46,7 +46,7 @@ class loader as Ant.
 | [classLoader](#propertyclassLoader) | An optional class loader which will be set as Ant's class loader. | 
 | [classPath](#propertyclassPath) | A class path to use to create Ants class loader. | 
 | [exception](#propertyexception) | How to handle build failure. | 
-| [messageLevel](#propertymessageLevel) | The message level for output. | 
+| [messageLevel](#propertymessageLevel) | The message level for output. one of DEBUG, ERROR, INFO, VERBOSE, WARN. | 
 | [name](#propertyname) |  | 
 | [output](#propertyoutput) | Where to write the resultant output from ant. | 
 | [project](#propertyproject) | A reference to project in another ant job. | 
