@@ -42,11 +42,11 @@ class loader as Ant.
 
 | Property | Description |
 | -------- | ----------- |
-| [baseDir](#propertybaseDir) | The base directory. | 
-| [classLoader](#propertyclassLoader) | An optional class loader which will be set as Ant's class loader. | 
-| [classPath](#propertyclassPath) | A class path to use to create Ants class loader. | 
+| [baseDir](#propertybasedir) | The base directory. | 
+| [classLoader](#propertyclassloader) | An optional class loader which will be set as Ant's class loader. | 
+| [classPath](#propertyclasspath) | A class path to use to create Ants class loader. | 
 | [exception](#propertyexception) | How to handle build failure. | 
-| [messageLevel](#propertymessageLevel) | The message level for output. one of DEBUG, ERROR, INFO, VERBOSE, WARN. | 
+| [messageLevel](#propertymessagelevel) | The message level for output. one of DEBUG, ERROR, INFO, VERBOSE, WARN. | 
 | [name](#propertyname) |  | 
 | [output](#propertyoutput) | Where to write the resultant output from ant. | 
 | [project](#propertyproject) | A reference to project in another ant job. | 
@@ -67,7 +67,7 @@ class loader as Ant.
 
 
 ### Property Detail
-#### baseDir <a name="propertybaseDir"></a>
+#### baseDir <a name="propertybasedir"></a>
 
 <table style='font-size:smaller'>
       <tr><td><i>Configured By</i></td><td>ATTRIBUTE</td></tr>
@@ -78,7 +78,7 @@ class loader as Ant.
 The base directory. Equivalent to setting the
 basedir attribute of an ant project.
 
-#### classLoader <a name="propertyclassLoader"></a>
+#### classLoader <a name="propertyclassloader"></a>
 
 <table style='font-size:smaller'>
       <tr><td><i>Configured By</i></td><td>ELEMENT</td></tr>
@@ -89,7 +89,7 @@ basedir attribute of an ant project.
 An optional class loader which will be set as
 Ant's class loader.
 
-#### classPath <a name="propertyclassPath"></a>
+#### classPath <a name="propertyclasspath"></a>
 
 <table style='font-size:smaller'>
       <tr><td><i>Configured By</i></td><td>ATTRIBUTE</td></tr>
@@ -114,7 +114,7 @@ the class loader of this job will be used as the parent.
 How to handle build failure. If true, then a build
 failure will in an EXCEPTION state for this job.
 
-#### messageLevel <a name="propertymessageLevel"></a>
+#### messageLevel <a name="propertymessagelevel"></a>
 
 <table style='font-size:smaller'>
       <tr><td><i>Configured By</i></td><td>ATTRIBUTE</td></tr>
