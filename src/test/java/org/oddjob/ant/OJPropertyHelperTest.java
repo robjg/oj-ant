@@ -1,21 +1,13 @@
 package org.oddjob.ant;
+
+import org.apache.tools.ant.*;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestName;
-import org.junit.Assert;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.apache.tools.ant.BuildEvent;
-import org.apache.tools.ant.BuildListener;
-import org.apache.tools.ant.DefaultLogger;
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.PropertyHelper;
-import org.apache.tools.ant.Target;
 import org.oddjob.OddjobDescriptorFactory;
 import org.oddjob.arooa.ArooaDescriptor;
-import org.oddjob.arooa.ArooaParseException;
 import org.oddjob.arooa.ArooaTools;
 import org.oddjob.arooa.MockArooaSession;
 import org.oddjob.arooa.registry.BeanRegistry;
@@ -25,32 +17,37 @@ import org.oddjob.arooa.standard.MockPropertyManager;
 import org.oddjob.arooa.standard.StandardArooaSession;
 import org.oddjob.arooa.standard.StandardTools;
 import org.oddjob.values.types.PropertyType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.lang.reflect.Type;
 
 public class OJPropertyHelperTest extends Assert {
 
-	private static final Logger logger = LoggerFactory.getLogger(AntFileTest.class);
+	private static final Logger logger = LoggerFactory.getLogger(OJPropertyHelperTest.class);
 
 	@Rule public TestName name = new TestName();
 	
     @Before
-    public void setUp() throws Exception {
-		logger.info("-----------------------  " + name.getMethodName() + 
-				"  ---------------------");
-		logger.info("stdout is " + System.out);
+    public void setUp() {
+        logger.info("-----------------------  {}  ---------------------", name.getMethodName());
+        logger.info("stdout is {}", System.out);
 	}
 	
-	private class OurLookup extends MockBeanRegistry {
+	private static class OurLookup extends MockBeanRegistry {
 
-		public <T> T lookup(String fullPath, Class<T> type) {
+		@Override
+		public <T> T lookup(String fullPath, Type type) {
 			if ("preferences.fruit".equals(fullPath)) {
-				return type.cast("Apples");
+                //noinspection unchecked
+                return (T) "Apples";
 			}
 			return null;
 		}
 		
 	}
 	
-	private class MyBuildListener implements BuildListener {
+	private static class MyBuildListener implements BuildListener {
 		String message;
 		
 		public void buildStarted(BuildEvent event) {
@@ -72,7 +69,7 @@ public class OJPropertyHelperTest extends Assert {
 		}	
 	}
 
-	private class OurSession extends MockArooaSession {
+	private static class OurSession extends MockArooaSession {
 
 		@Override
 		public BeanRegistry getBeanRegistry() {
@@ -115,7 +112,7 @@ public class OJPropertyHelperTest extends Assert {
 
 		ap.parse("<tasks><echo message='${preferences.fruit}'/></tasks>");
 		
-		Target result = (Target) project.getTargets().get(
+		Target result = project.getTargets().get(
 				AntParser.TARGET_NAME);
 		assertNotNull(result);
 		
@@ -127,7 +124,7 @@ public class OJPropertyHelperTest extends Assert {
 
 	
     @Test
-	public void testArooaValueWithProject() throws ArooaParseException {
+	public void testArooaValueWithProject() {
 
 		PropertyType root = new PropertyType();
 		PropertyType property = (PropertyType) root.get("snack");
